@@ -2,25 +2,23 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { CircularProgressbar, buildStyles } from 'react-circular-progressbar'
-import 'react-circular-progressbar/dist/styles.css'
 import { BackgroundPattern } from '@/components/background-pattern'
 
 export default function AdPage({ params }: { params: { brand: string } }) {
-  const [progress, setProgress] = useState(0)
+  const [countdown, setCountdown] = useState(10)
   const router = useRouter()
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setProgress((oldProgress) => {
-        if (oldProgress === 100) {
+      setCountdown((prevCount) => {
+        if (prevCount <= 1) {
           clearInterval(timer)
           router.push(`/results/${params.brand}`)
-          return 100
+          return 0
         }
-        return Math.min(oldProgress + 1, 100)
+        return prevCount - 1
       })
-    }, 100)
+    }, 1000)
 
     return () => {
       clearInterval(timer)
@@ -35,23 +33,9 @@ export default function AdPage({ params }: { params: { brand: string } }) {
           <p className="text-2xl text-gray-400">Advertisement Placeholder</p>
         </div>
         <div className="flex items-center justify-center">
-          <div className="w-16 h-16 mr-4">
-            <CircularProgressbar
-              value={progress}
-              styles={buildStyles({
-                pathColor: `url(#orangePurpleGradient)`,
-                trailColor: '#d1d5db',
-              })}
-            >
-              <defs>
-                <linearGradient id="orangePurpleGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#f97316" />
-                  <stop offset="100%" stopColor="#9333ea" />
-                </linearGradient>
-              </defs>
-            </CircularProgressbar>
-          </div>
-          <p className="text-lg text-gray-600">We're preparing your results now.</p>
+          <p className="text-lg text-gray-600">
+            Results coming in... {countdown}
+          </p>
         </div>
       </div>
     </div>
