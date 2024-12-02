@@ -1,12 +1,22 @@
 import { SearchBar } from '@/components/search-bar'
 import { PopularSearches } from '@/components/popular-searches'
 import { Footer } from '@/components/footer'
-import { BackgroundPattern } from '@/components/background-pattern'
+import { BackgroundPattern as BgPattern } from '@/components/background-pattern'
+
+interface BgPatternProps {
+  className?: string;
+}
+
+export function BackgroundPattern({ className }: BgPatternProps) {
+  // ... component code
+}
 
 const HomePage = () => {
+  const className = "";
+
   return (
     <div className="min-h-screen flex flex-col">
-      <BackgroundPattern />
+      <div className={`${className} opacity-[0.02]`}></div>
       <main className="flex-grow flex flex-col items-center justify-center p-4">
         <div className="w-full max-w-2xl mx-auto text-center space-y-12">
           <div className="space-y-1">

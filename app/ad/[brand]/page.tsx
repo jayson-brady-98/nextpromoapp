@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { BackgroundPattern } from '@/components/background-pattern'
 
 export default function AdPage({ params }: { params: { brand: string } }) {
   const [countdown, setCountdown] = useState(10)
@@ -27,7 +26,6 @@ export default function AdPage({ params }: { params: { brand: string } }) {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-[#fffaf0]">
-      <BackgroundPattern />
       <div className="w-full max-w-4xl p-8">
         <div className="bg-white rounded-lg shadow-xl p-8 mb-8 aspect-video flex items-center justify-center">
           <p className="text-2xl text-gray-400">Advertisement Placeholder</p>
