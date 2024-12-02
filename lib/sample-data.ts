@@ -5,7 +5,7 @@ export const popularSearches = ['Gymshark', 'Boody', 'Nike']
 export const sampleBrands: Record<string, BrandData> = {
   gymshark: {
     name: 'Gymshark',
-    logoUrl: '/placeholder.svg',
+    logoUrl: '/logos/gymshark.svg',
     nextSale: {
       date: 'November 28',
       probability: 88,

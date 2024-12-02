@@ -48,19 +48,21 @@ export default function ResultsPage({ params }: { params: { brand: string } }) {
               <Search className="w-5 h-5 mr-2" />
               New search
             </Link>
-            <Image
-              src={brandData.logoUrl}
-              alt={`${brandData.name} logo`}
-              width={200}
-              height={60}
-              className="h-12 w-auto"
-            />
           </div>
 
           <section className="mb-16 bg-white/80 backdrop-blur-sm rounded-3xl shadow-2xl overflow-hidden">
-            <div className="bg-gradient-to-r from-orange-500 to-purple-600 p-8 text-white">
-              <h2 className="text-3xl font-bold mb-2">Next Sale Prediction</h2>
-              <p className="text-xl opacity-90">Powered by coffee and the cost of living crisis</p>
+            <div className="bg-gradient-to-r from-orange-500 to-purple-600 p-8 text-white flex justify-between items-center">
+              <div>
+                <h2 className="text-3xl font-bold mb-2">Next Sale Prediction</h2>
+                <p className="text-xl opacity-90">Powered by coffee and the cost of living crisis</p>
+              </div>
+              <Image
+                src={brandData.logoUrl}
+                alt={`${brandData.name} logo`}
+                width={120}
+                height={40}
+                className="h-16 w-auto"
+              />
             </div>
             <div className="p-8">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
