@@ -28,9 +28,13 @@ export function SearchBar() {
       <div className="relative flex items-center">
         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
         <Input
-          className="h-14 pl-10 pr-32 rounded-full text-lg bg-white/80 backdrop-blur-sm border-0 shadow-lg 
+          className="h-14 pl-8 pr-32 rounded-full bg-white/80 backdrop-blur-sm border-0 shadow-lg 
                      bg-gradient-to-r from-orange-500/10 to-purple-500/10 hover:from-orange-500/20 hover:to-purple-500/20
-                     transition-all duration-300"
+                     transition-all duration-300
+                     text-[1rem] leading-[1.5] align-middle
+                     placeholder:text-[1rem] placeholder:leading-[1.5] placeholder:align-middle
+                     placeholder:pt-1"
+          style={{ lineHeight: '1' }}
           placeholder="Search for a brand..."
           value={query}
           onChange={(e) => setQuery(e.target.value)}
