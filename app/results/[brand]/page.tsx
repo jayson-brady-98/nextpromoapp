@@ -1,7 +1,6 @@
 import { sampleBrands } from '@/lib/sample-data'
 import { SearchBar } from '@/components/search-bar'
 import { Footer } from '@/components/footer'
-import { BackgroundPattern } from '@/components/background-pattern'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Search, Calendar, Percent, TrendingUp } from 'lucide-react'
@@ -12,7 +11,6 @@ export default function ResultsPage({ params }: { params: { brand: string } }) {
   if (!brandData) {
     return (
       <div className="min-h-screen flex flex-col">
-        <BackgroundPattern />
         <main className="flex-grow flex flex-col items-center justify-center p-4">
           <div className="w-full max-w-2xl mx-auto text-center">
             <h1 className="text-3xl font-bold mb-4">
@@ -37,7 +35,6 @@ export default function ResultsPage({ params }: { params: { brand: string } }) {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <BackgroundPattern />
       <main className="flex-grow">
         <div className="w-full max-w-4xl mx-auto p-4">
           <div className="flex justify-between items-center mb-8">
