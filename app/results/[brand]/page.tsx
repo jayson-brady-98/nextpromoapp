@@ -14,10 +14,10 @@ export default function ResultsPage({ params }: { params: { brand: string } }) {
         <main className="flex-grow flex flex-col items-center justify-center p-4">
           <div className="w-full max-w-2xl mx-auto text-center">
             <h1 className="text-3xl font-bold mb-4">
-              Oh no, sorry but we haven&apos;t added {params.brand} to our database yet
+              Sorry, we haven&apos;t added {params.brand} to our database yet
             </h1>
             <p className="text-xl mb-8">
-              If you want to see this added, let us know here and we&apos;ll add it for you!
+              Shoot us an email and we&apos;ll add it asap
             </p>
             <Link
               href="/"

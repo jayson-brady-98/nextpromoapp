@@ -35,7 +35,7 @@ export default function AdPage({ params }: { params: { brand: string } }) {
             Results coming in... {countdown}
           </p>
         </div>
-      </div>x
+      </div>
     </div>
   )
 }
