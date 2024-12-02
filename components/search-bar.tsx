@@ -5,6 +5,7 @@ import { useState } from 'react'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Search } from 'lucide-react'
+import { sampleBrands } from '@/lib/sample-data'
 
 export function SearchBar() {
   const [query, setQuery] = useState('')
@@ -13,7 +14,12 @@ export function SearchBar() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (query.trim()) {
-      router.push(`/ad/${query.toLowerCase()}`)
+      const normalizedQuery = query.toLowerCase()
+      if (sampleBrands[normalizedQuery]) {
+        router.push(`/ad/${normalizedQuery}`)
+      } else {
+        router.push(`/results/${normalizedQuery}`)
+      }
     }
   }
 

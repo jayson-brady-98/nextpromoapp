@@ -3,6 +3,8 @@ import { PopularSearches } from '@/components/popular-searches'
 import { Footer } from '@/components/footer'
 
 const HomePage = () => {
+  const className = "";
+
   return (
     <div className="min-h-screen flex flex-col">
       <main className="flex-grow flex flex-col items-center justify-center p-4">
