@@ -5,7 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { Search, Calendar, Percent, TrendingUp } from 'lucide-react'
 
-export default function ResultsPage({ params }: { params: { brand: string } }) {
+export default async function ResultsPage({ params }: { params: { brand: string } }) {
   const brandData = sampleBrands[params.brand.toLowerCase()]
 
   if (!brandData) {
@@ -51,7 +51,7 @@ export default function ResultsPage({ params }: { params: { brand: string } }) {
             <div className="bg-gradient-to-r from-orange-500 to-purple-600 p-8 text-white flex justify-between items-center">
               <div>
                 <h2 className="text-3xl font-bold mb-2">Next Sale Prediction</h2>
-                <p className="text-xl opacity-90">Powered by coffee and the cost of living crisis</p>
+                <p className="text-xl opacity-90 text-gray-200">Powered by coffee and the cost of living crisis</p>
               </div>
               <Image
                 src={brandData.logoUrl}
@@ -94,8 +94,8 @@ export default function ResultsPage({ params }: { params: { brand: string } }) {
               {brandData.previousSales.map((sale, index) => (
                 <div
                   key={index}
-                  className="p-6 rounded-2xl bg-white/80 backdrop-blur-sm
-                             shadow-lg transition-all duration-300 hover:shadow-xl"
+                  className="p-6 rounded-2xl bg-white/100 shadow-lg border border-gray-100
+                             transition-all duration-300 hover:shadow-xl"
                 >
                   <div className="text-3xl font-bold mb-2">{sale.discount}% off</div>
                   <div className="text-gray-800">{sale.event}</div>
