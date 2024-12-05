@@ -14,12 +14,7 @@ export function SearchBar() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (query.trim()) {
-      const normalizedQuery = query.toLowerCase()
-      if (sampleBrands[normalizedQuery]) {
-        router.push(`/ad/${normalizedQuery}`)
-      } else {
-        router.push(`/results/${normalizedQuery}`)
-      }
+      router.push(`/results/${query.toLowerCase()}`)
     }
   }
 
