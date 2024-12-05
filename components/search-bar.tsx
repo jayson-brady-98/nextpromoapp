@@ -26,14 +26,15 @@ export function SearchBar() {
   return (
     <form onSubmit={handleSubmit} className="w-full max-w-2xl mx-auto">
       <div className="relative flex items-center">
-        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#182A39]/60 w-5 h-5" />
         <Input
-          className="h-14 pl-8 pr-32 rounded-full bg-white/80 backdrop-blur-sm border-0 shadow-lg 
-                     bg-gradient-to-r from-orange-500/10 to-purple-500/10 hover:from-orange-500/20 hover:to-purple-500/20
+          className="h-14 pl-10 pr-32 rounded-full bg-[#D2CAA6] 
+                     shadow-inner border border-[#AF9550]/30
                      transition-all duration-300
-                     text-[1rem] leading-[1.5] align-middle
-                     placeholder:text-[1rem] placeholder:leading-[1.5] placeholder:align-middle
-                     placeholder:pt-1"
+                     text-[#182A39] text-[1rem] leading-[1.5] align-middle pt-2
+                     placeholder:text-[#182A39]/60 placeholder:text-[1rem] placeholder:leading-[1.5] placeholder:align-middle
+                     placeholder:pt-2
+                     focus:ring-2 focus:ring-[#AF9550]/20 focus:border-[#AF9550]/50"
           style={{ lineHeight: '1' }}
           placeholder="Search for a brand..."
           value={query}
@@ -42,8 +43,8 @@ export function SearchBar() {
         <Button
           type="submit"
           className="absolute right-2 top-1/2 transform -translate-y-1/2 h-10 px-4 rounded-full 
-                     bg-gradient-to-r from-orange-500 to-purple-600 text-white
-                     hover:from-orange-600 hover:to-purple-700 transition-all duration-300"
+                     bg-[#E84753] hover:bg-[#E84753]/90 text-white/90
+                     transition-all duration-300"
         >
           Search brand
         </Button>

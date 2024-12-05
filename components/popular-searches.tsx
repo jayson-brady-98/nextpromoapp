@@ -18,8 +18,8 @@ export function PopularSearches() {
 
   return (
     <div className="mt-8 text-center">
-      <span className="text-gray-600 block mb-3">Popular searches:</span>
-      <div className="flex flex-wrap justify-center gap-3">
+      <div className="flex flex-wrap items-center justify-center gap-3">
+        <span className="text-[#D2CAA6] font-semibold">Popular searches:</span>
         {popularSearches.map((search) => (
           <button
             key={search}

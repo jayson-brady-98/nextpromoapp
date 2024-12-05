@@ -25,13 +25,13 @@ export default function AdPage({ params }: { params: { brand: string } }) {
   }, [router, params.brand])
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-[#fffaf0]">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-[#182A39]">
       <div className="w-full max-w-4xl p-8">
         <div className="bg-white rounded-lg shadow-xl p-8 mb-8 aspect-video flex items-center justify-center">
           <p className="text-2xl text-gray-400">Advertisement Placeholder</p>
         </div>
         <div className="flex items-center justify-center">
-          <p className="text-lg text-gray-600">
+          <p className="text-lg text-[#D2CAA6]">
             Results coming in... {countdown}
           </p>
         </div>

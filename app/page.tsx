@@ -6,18 +6,20 @@ const HomePage = () => {
   const className = "";
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-[#182A39]">
       <main className="flex-grow flex flex-col items-center justify-center p-4">
-        <div className="w-full max-w-2xl mx-auto text-center space-y-12">
-          <div className="space-y-1">
-            <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-orange-500 to-purple-600 text-transparent bg-clip-text">
-              nextpromo.io
-            </h1>
-            <h2 className="text-sm md:text-base font-medium text-gray-700">
-              Empowering consumers
-            </h2>
+        <div className="w-full max-w-2xl mx-auto text-center">
+          <div className="mb-16">
+            <div className="space-y-1 relative">
+              <h1 className="text-6xl md:text-6.5xl font-bold text-[#E84753]">
+                nextpromo.io
+              </h1>
+              <h2 className="text-sm md:text-base font-medium text-[#D2CAA6] absolute left-[45%] top-[100%] -mt-3">
+                Empowering Consumers
+              </h2>
+            </div>
           </div>
-          <div>
+          <div className="mb-16">
             <SearchBar />
           </div>
           <PopularSearches />
