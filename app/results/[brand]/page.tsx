@@ -3,7 +3,10 @@ import { Footer } from '@/components/footer'
 import Link from 'next/link'
 import { Search, Calendar} from 'lucide-react'
 
-export default async function ResultsPage({ params }: { params: { brand: string } }) {
+type BrandParams = Promise<{ brand: string }>
+
+export default async function ResultsPage(props: { params: BrandParams }) {
+  const params = await props.params
   const brandData = sampleBrands[params.brand.toLowerCase()]
 
   if (!brandData) {
