@@ -1,9 +1,7 @@
 import { sampleBrands } from '@/lib/sample-data'
-import { SearchBar } from '@/components/search-bar'
 import { Footer } from '@/components/footer'
-import Image from 'next/image'
 import Link from 'next/link'
-import { Search, Calendar, Percent, TrendingUp } from 'lucide-react'
+import { Search, Calendar} from 'lucide-react'
 
 export default async function ResultsPage({ params }: { params: { brand: string } }) {
   const brandData = sampleBrands[params.brand.toLowerCase()]
@@ -14,7 +12,7 @@ export default async function ResultsPage({ params }: { params: { brand: string 
         <main className="flex-grow flex flex-col items-center justify-center p-4">
           <div className="w-full max-w-2xl mx-auto text-center">
             <h1 className="text-3xl font-bold mb-4">
-              Sorry, I haven&apos;t added "{decodeURIComponent(params.brand)}" to the database yet
+              Sorry, I haven&apos;t added &quot;{decodeURIComponent(params.brand)}&quot; to the database yet
             </h1>
             <p className="text-xl mb-8">
               Shoot me an email and I&apos;ll add it asap :)

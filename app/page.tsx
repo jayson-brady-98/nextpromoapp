@@ -1,10 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { SearchBar } from '@/components/search-bar'
 import { PopularSearches } from '@/components/popular-searches'
 import { Footer } from '@/components/footer'
 
 const HomePage = () => {
-  const className = "";
-
   return (
     <div className="min-h-screen flex flex-col bg-[#182A39]">
       <main className="flex-grow flex flex-col items-center justify-center p-4">
