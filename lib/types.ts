@@ -6,7 +6,6 @@ export interface Sale {
 
 export interface BrandData {
   name: string
-  logoUrl: string
   nextSale: {
     date: string
     probability: number

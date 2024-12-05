@@ -1,31 +1,45 @@
 import { BrandData } from './types'
 
-export const popularSearches = ['Gymshark', 'Boody', 'Nike']
+export const popularSearches = ['Gymshark', 'White Fox', 'Nike']
 
 export const sampleBrands: Record<string, BrandData> = {
   gymshark: {
     name: 'Gymshark',
-    logoUrl: '/logos/gymshark.svg',
     nextSale: {
-      date: 'November 28',
+      date: 'April, 2025',
       probability: 88,
       discount: 20
     },
     previousSales: [
       {
-        discount: 40,
+        discount: 70,
         event: 'Black Friday',
-        date: '2023'
-      },
-      {
-        discount: 25,
-        event: 'Cyber Monday',
-        date: '2023'
-      },
-      {
+        date: 'November 2024'
+    },
+    {
+        discount: 50,
+        event: 'Selected Lines Sale',
+        date: 'September 2024'
+    },
+    {
+        discount: 60,
+        event: 'Summer Sale',
+        date: 'July 2024'
+    },
+    {
+        discount: 60,
+        event: 'Summer Sale',
+        date: 'June 2024'
+    },
+    {
+        discount: 24,
+        event: 'Athlete Day',
+        date: 'May 2024'
+    },
+    {
         discount: 20,
-        event: 'Spring Sale',
-        date: 'March 2022'
+        event: 'Flash Sale',
+        date: 'April 2024'
       }
     ]
   }

@@ -1,8 +1,7 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, use } from 'react'
 import { useRouter } from 'next/navigation'
-
 export default function AdPage({ params }: { params: { brand: string } }) {
   const brand = params.brand
   const [countdown, setCountdown] = useState(10)

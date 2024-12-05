@@ -14,14 +14,14 @@ export default async function ResultsPage({ params }: { params: { brand: string 
         <main className="flex-grow flex flex-col items-center justify-center p-4">
           <div className="w-full max-w-2xl mx-auto text-center">
             <h1 className="text-3xl font-bold mb-4">
-              Sorry, we haven&apos;t added {params.brand} to our database yet
+              Sorry, I haven&apos;t added "{decodeURIComponent(params.brand)}" to the database yet
             </h1>
             <p className="text-xl mb-8">
-              Shoot us an email and we&apos;ll add it asap
+              Shoot me an email and I&apos;ll add it asap :)
             </p>
             <Link
               href="/"
-              className="inline-flex items-center text-lg text-gray-600 hover:text-gray-800 transition-colors"
+              className="inline-flex items-center text-gray-400 hover:text-gray-300 transition-colors"
             >
               <Search className="w-5 h-5 mr-2" />
               Try another search
@@ -78,7 +78,7 @@ export default async function ResultsPage({ params }: { params: { brand: string 
                     >
                       <div className="text-lg w-1/5 font-semibold">{sale.event}</div>
                       <div className="text-lg w-1/5 font-normal">{sale.date}</div>
-                      <div className="text-lg font-normal">{sale.discount}% off</div>
+                      <div className="text-lg font-normal">{sale.discount === 0 ? "Unknown Discount" : `${sale.discount}% off`}</div>
                     </div>
                   ))}
               </div>
