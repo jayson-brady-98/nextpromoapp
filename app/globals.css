@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 body {
-  font-family: Georgia, Times, "Times New Roman", serif;
+  @apply bg-background text-foreground;
 }
 
 @layer base {
@@ -64,7 +64,7 @@ body {
 
 @layer base {
   * {
-    @apply border-border;
+    border-color: theme('colors.black');
   }
   body {
     @apply bg-background text-foreground;

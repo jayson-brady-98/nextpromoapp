@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 
 export default function AdPage({ params }: { params: { brand: string } }) {
+  const brand = params.brand
   const [countdown, setCountdown] = useState(10)
   const router = useRouter()
 
@@ -12,7 +13,7 @@ export default function AdPage({ params }: { params: { brand: string } }) {
       setCountdown((prevCount) => {
         if (prevCount <= 1) {
           clearInterval(timer)
-          router.push(`/results/${params.brand}`)
+          router.push(`/results/${brand}`)
           return 0
         }
         return prevCount - 1
@@ -22,7 +23,7 @@ export default function AdPage({ params }: { params: { brand: string } }) {
     return () => {
       clearInterval(timer)
     }
-  }, [router, params.brand])
+  }, [router, brand])
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-[#182A39]">
