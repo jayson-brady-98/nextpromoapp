@@ -3,14 +3,19 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 
-type Props = {
+type AdPageProps = {
   params: {
     brand: string
-  },
-  searchParams?: { [key: string]: string | string[] | undefined }
+  };
+};
+
+export async function generateStaticParams() {
+  // Replace with your logic to fetch available brands
+  const brands = ['brand1', 'brand2', 'brand3']; // Example brands
+  return brands.map((brand) => ({ brand }));
 }
 
-export default function AdPage({ params }: Props) {
+export default function AdPage({ params }: AdPageProps) {
   const brand = params.brand
   const [countdown, setCountdown] = useState(10)
   const router = useRouter()
