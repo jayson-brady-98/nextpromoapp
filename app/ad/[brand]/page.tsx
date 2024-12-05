@@ -2,8 +2,10 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-export default function AdPage({ params }: { params: { brand: string } }) {
-  const brand = params.brand
+import { PageProps } from 'next/types'
+
+export default function AdPage({ params }: PageProps) {
+  const brand = params.brand as string
   const [countdown, setCountdown] = useState(10)
   const router = useRouter()
 
