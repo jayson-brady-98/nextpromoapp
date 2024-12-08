@@ -1,7 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Search } from 'lucide-react'
@@ -10,6 +10,17 @@ import { sampleBrands } from '@/lib/sample-data'
 export function SearchBar() {
   const [query, setQuery] = useState('')
   const router = useRouter()
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 640) // adjust breakpoint as needed
+    }
+    
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -33,12 +44,12 @@ export function SearchBar() {
           className="h-14 pl-10 pr-32 rounded-full bg-[#D2CAA6] 
                      shadow-inner border border-[#AF9550]/30
                      transition-all duration-300
-                     text-[#182A39] text-[1rem] leading-[1.5] align-middle pt-2
-                     placeholder:text-[#182A39]/60 placeholder:text-[1rem] placeholder:leading-[1.5] placeholder:align-middle
-                     placeholder:pt-2
+                     text-[#182A39] !text-base leading-[1.5] align-middle
+                     placeholder:text-[#182A39]/60 !placeholder:text-base placeholder:leading-[1.5] placeholder:align-middle
                      focus:ring-2 focus:ring-[#AF9550]/20 focus:border-[#AF9550]/50"
-          style={{ lineHeight: '1' }}
-          placeholder="Search a brand to discover their next sale date"
+          placeholder={isMobile 
+            ? "Discover upcoming sales" 
+            : "Discover upcoming sales on your favorite brands"}
           value={query}
           onChange={(e) => setQuery(e.target.value)}
         />
