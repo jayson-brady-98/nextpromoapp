@@ -5,7 +5,7 @@ export function Footer() {
     <footer className="w-full py-4 pr-4 text-right text-gray-400 bg-transparent">
       <p className="flex items-center justify-end gap-1">
         Built by <a 
-          href="https://www.linkedin.com/in/jayson-brady-93ba8614b/"
+          href="https://www.jaysonbrady.com"
           target="_blank"
           rel="noopener noreferrer"
           className="hover:text-[#E74753] transition-colors"
