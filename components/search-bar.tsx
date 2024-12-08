@@ -14,7 +14,14 @@ export function SearchBar() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (query.trim()) {
-      router.push(`/results/${query.toLowerCase()}`)
+      // Check if brand exists in database
+      const brandExists = sampleBrands[query.toLowerCase()]
+      
+      if (brandExists) {
+        router.push(`/advertisement/${query.toLowerCase()}`)
+      } else {
+        router.replace(`/results/${query.toLowerCase()}`)
+      }
     }
   }
 
@@ -31,7 +38,7 @@ export function SearchBar() {
                      placeholder:pt-2
                      focus:ring-2 focus:ring-[#AF9550]/20 focus:border-[#AF9550]/50"
           style={{ lineHeight: '1' }}
-          placeholder="Search for a brand..."
+          placeholder="Search a brand to discover their next sale date"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
         />

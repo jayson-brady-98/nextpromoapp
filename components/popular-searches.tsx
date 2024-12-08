@@ -2,12 +2,18 @@
 
 import { useRouter } from 'next/navigation'
 import { popularSearches } from '@/lib/sample-data'
+import { sampleBrands } from '@/lib/sample-data'
 
 export function PopularSearches() {
   const router = useRouter()
 
   const handleClick = (search: string) => {
-    router.push(`/results/${search.toLowerCase()}`)
+    const brandExists = sampleBrands[search.toLowerCase()]
+    if (brandExists) {
+      router.push(`/advertisement/${search.toLowerCase()}`)
+    } else {
+      router.replace(`/results/${search.toLowerCase()}`)
+    }
   }
 
   return (
