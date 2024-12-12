@@ -5,14 +5,15 @@ import { Footer } from '@/components/footer'
 import Link from 'next/link'
 import { Search, Calendar} from 'lucide-react'
 
-type BrandParams = Promise<{ brand: string }>
-
 type SalePost = {
   sale_date: string;
   event: string;
-  discount: string;
   sale_discount: string;
+  discount: string;
 }
+
+type BrandParams = Promise<{ brand: string }>
+type SearchParams = Promise<{ data?: string }>
 
 function formatDateRange(startDate: string, endDate: string) {
   const start = new Date(startDate)
@@ -33,8 +34,12 @@ function formatDateRange(startDate: string, endDate: string) {
   return `${start.toLocaleDateString('en-US', options)} - ${end.toLocaleDateString('en-US', options)}`
 }
 
-export default async function ResultsPage(props: { params: BrandParams }) {
+export default async function ResultsPage(props: {
+  params: BrandParams;
+  searchParams: SearchParams;
+}) {
   const params = await props.params
+  const searchParams = await props.searchParams
   
   // Try to get stored data first if coming from advertisement page
   let brandData
@@ -46,7 +51,12 @@ export default async function ResultsPage(props: { params: BrandParams }) {
     }
   }
   
-  // If no stored data, fetch it
+  // If no stored data, check URL params
+  if (!brandData && searchParams.data) {
+    brandData = JSON.parse(decodeURIComponent(searchParams.data))
+  }
+  
+  // If still no data, fetch it
   if (!brandData) {
     brandData = await fetchPredictions(params.brand.toLowerCase())
   }
