@@ -1,29 +1,40 @@
 import { redirect } from 'next/navigation'
 import { AdvertisementClient } from './advertisement-client'
-import { fetchPredictions } from '@/lib/api/prediction'
+import { createClient } from '@supabase/supabase-js'
 
 type BrandParams = Promise<{ brand: string }>
 
-// Update validation to check predictions table
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+const supabase = createClient(supabaseUrl, supabaseKey)
+
 async function validateBrand(brand: string) {
   console.log('AdvertisementPage - Validating brand:', brand)
-  const prediction = await fetchPredictions(brand)
-  console.log('AdvertisementPage - Received prediction:', prediction)
-  console.log('AdvertisementPage - Type of prediction:', typeof prediction)
-  console.log('AdvertisementPage - Is prediction truthy?:', !!prediction)
   
-  if (!prediction) {
-    console.log('AdvertisementPage - Redirecting to results')
+  try {
+    const { data, error } = await supabase
+      .from('predictions')
+      .select('*')
+      .ilike('brand_name', `%${brand}%`)
+      .single()
+    
+    console.log('AdvertisementPage - Supabase response:', { data, error })
+    
+    if (error || !data) {
+      console.log('AdvertisementPage - Redirecting to results due to:', error || 'No data')
+      redirect(`/results/${brand}`)
+    }
+    
+    console.log('AdvertisementPage - Validation passed')
+    return data
+  } catch (error) {
+    console.error('AdvertisementPage - Error:', error)
     redirect(`/results/${brand}`)
   }
-  console.log('AdvertisementPage - Validation passed')
 }
 
 export default async function AdvertisementPage(props: { params: BrandParams }) {
   const params = await props.params
-  
-  // Validate brand before rendering
-  await validateBrand(params.brand)
-  
+  await validateBrand(params.brand.toLowerCase())
   return <AdvertisementClient brand={params.brand} />
 }
