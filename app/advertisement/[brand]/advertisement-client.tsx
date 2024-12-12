@@ -13,12 +13,8 @@ export function AdvertisementClient({ brand, brandData }: AdvertisementClientPro
   const router = useRouter()
   
   useEffect(() => {
-    if (brandData) {
-      sessionStorage.setItem('brandData', JSON.stringify(brandData))
-    }
-    
     const timer = setTimeout(() => {
-      router.push(`/results/${brand}`)
+      router.push(`/results/${brand}?data=${encodeURIComponent(JSON.stringify(brandData))}`)
     }, 10000)
 
     return () => clearTimeout(timer)
