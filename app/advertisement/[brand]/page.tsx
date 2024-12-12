@@ -33,12 +33,17 @@ async function validateBrand(brand: string) {
   }
 }
 
-export default async function AdvertisementPage(props: { params: BrandParams }) {
+export default async function AdvertisementPage(props: { params: BrandParams, searchParams: { data?: string } }) {
   const params = await props.params
-  const brandData = await validateBrand(params.brand.toLowerCase())
-  // Store the validated data in sessionStorage before showing the advertisement
-  if (typeof window !== 'undefined') {
-    sessionStorage.setItem('brandData', JSON.stringify(brandData))
+  let brandData
+
+  if (props.searchParams.data) {
+    // Use the data passed from the search
+    brandData = JSON.parse(decodeURIComponent(props.searchParams.data))
+  } else {
+    // Fallback to fetching if needed
+    brandData = await validateBrand(params.brand.toLowerCase())
   }
-  return <AdvertisementClient brand={params.brand} />
+
+  return <AdvertisementClient brand={params.brand} brandData={brandData} />
 }

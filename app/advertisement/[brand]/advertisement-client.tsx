@@ -6,18 +6,23 @@ import { Footer } from '@/components/footer'
 
 interface AdvertisementClientProps {
   brand: string
+  brandData?: any
 }
 
-export function AdvertisementClient({ brand }: AdvertisementClientProps) {
+export function AdvertisementClient({ brand, brandData }: AdvertisementClientProps) {
   const router = useRouter()
   
   useEffect(() => {
+    if (brandData) {
+      sessionStorage.setItem('brandData', JSON.stringify(brandData))
+    }
+    
     const timer = setTimeout(() => {
       router.push(`/results/${brand}`)
-    }, 10000) // 10 seconds
+    }, 10000)
 
     return () => clearTimeout(timer)
-  }, [router, brand])
+  }, [router, brand, brandData])
   
   return (
     <div className="min-h-screen flex flex-col bg-[#182A39]">

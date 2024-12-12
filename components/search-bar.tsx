@@ -34,7 +34,7 @@ export function SearchBar() {
       
       if (prediction) {
         console.log('SearchBar - Routing to advertisement page')
-        router.push(`/advertisement/${searchTerm}`)
+        router.push(`/advertisement/${searchTerm}?data=${encodeURIComponent(JSON.stringify(prediction))}`)
       } else {
         console.log('SearchBar - Routing to results page')
         router.replace(`/results/${searchTerm}`)
