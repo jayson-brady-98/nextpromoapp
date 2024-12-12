@@ -3,6 +3,7 @@ import { AdvertisementClient } from './advertisement-client'
 import { createClient } from '@supabase/supabase-js'
 
 type BrandParams = Promise<{ brand: string }>
+type SearchParams = Promise<{ data?: string }>
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
@@ -33,13 +34,17 @@ async function validateBrand(brand: string) {
   }
 }
 
-export default async function AdvertisementPage(props: { params: BrandParams, searchParams: { data?: string } }) {
+export default async function AdvertisementPage(props: {
+  params: BrandParams;
+  searchParams: SearchParams;
+}) {
   const params = await props.params
+  const searchParams = await props.searchParams
   let brandData
 
-  if (props.searchParams.data) {
+  if (searchParams.data) {
     // Use the data passed from the search
-    brandData = JSON.parse(decodeURIComponent(props.searchParams.data))
+    brandData = JSON.parse(decodeURIComponent(searchParams.data))
   } else {
     // Fallback to fetching if needed
     brandData = await validateBrand(params.brand.toLowerCase())
