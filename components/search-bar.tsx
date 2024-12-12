@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Search } from 'lucide-react'
-import { fetchPredictions } from '@/api/prediction'
+import { fetchPredictions } from '@/lib/api/prediction'
 
 export function SearchBar() {
   const [query, setQuery] = useState('')

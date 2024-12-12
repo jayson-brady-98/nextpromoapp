@@ -1,7 +1,7 @@
 'use client'
 import { useRouter } from 'next/navigation'
 import { popularSearches } from '../lib/sample-data'
-import { fetchPredictions } from '@/api/prediction'
+import { fetchPredictions } from '@/lib/api/prediction'
 
 export function PopularSearches() {
   const router = useRouter()

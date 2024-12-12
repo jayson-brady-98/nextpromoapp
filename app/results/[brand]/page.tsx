@@ -1,6 +1,6 @@
-import { fetchPredictions } from '@/api/prediction'
-import { getPredictionLabel } from '@/api/predictionLabel'
-import { fetchPreviousSales } from '@/api/previousSales'
+import { fetchPredictions } from '@/lib/api/prediction'
+import { getPredictionLabel } from '@/lib/api/predictionLabel'
+import { fetchPreviousSales } from '@/lib/api/previousSales'
 import { Footer } from '@/components/footer'
 import Link from 'next/link'
 import { Search, Calendar} from 'lucide-react'
@@ -11,6 +11,7 @@ type SalePost = {
   sale_date: string;
   event: string;
   discount: string;
+  sale_discount: string;
 }
 
 function formatDateRange(startDate: string, endDate: string) {
@@ -133,7 +134,7 @@ export default async function ResultsPage(props: { params: BrandParams }) {
                 {(() => {
                   console.log('Raw previous sales:', previousSales);
                   const reducedSales = previousSales
-                    .reduce((unique: SalePost[], post) => {
+                    .reduce((unique: SalePost[], post: SalePost) => {
                       // Convert current post date
                       const [day, month, year] = post.sale_date.split('-');
                       const currentDate = new Date(`${year}-${month}-${day}`);
@@ -176,7 +177,7 @@ export default async function ResultsPage(props: { params: BrandParams }) {
                   
                   console.log('After reduction:', reducedSales);
                   
-                  const sortedSales = reducedSales.sort((a, b) => {
+                  const sortedSales = reducedSales.sort((a: SalePost, b: SalePost) => {
                     const [dayA, monthA, yearA] = a.sale_date.split('-');
                     const [dayB, monthB, yearB] = b.sale_date.split('-');
                     const dateA = new Date(`${yearA}-${monthA}-${dayA}`);
@@ -186,7 +187,7 @@ export default async function ResultsPage(props: { params: BrandParams }) {
                   
                   console.log('After sorting:', sortedSales);
                   
-                  return sortedSales.slice(0, 10).map((sale, index) => (
+                  return sortedSales.slice(0, 10).map((sale: SalePost) => (
                     <div
                       key={`${sale.sale_date}-${sale.event}`}
                       className="flex justify-between py-4 text-[#CFCAA3]"
@@ -209,7 +210,7 @@ export default async function ResultsPage(props: { params: BrandParams }) {
         </div>
       </main>
       <p className="text-[#CFCAA3] text-sm italic p-8 text-center">
-        *Please note that this is a suggestion only. Predictions may be incorrect due to limited data and imperfect prediction models.
+        *Predictions may be incorrect. User discretion is advised.
       </p>
       <Footer />
     </div>

@@ -1,13 +1,13 @@
 import { redirect } from 'next/navigation'
-import { sampleBrands } from '@/lib/sample-data'
 import { AdvertisementClient } from './advertisement-client'
+import { fetchPredictions } from '@/lib/api/prediction'
 
 type BrandParams = Promise<{ brand: string }>
 
-// Add server-side validation
+// Update validation to check predictions table
 async function validateBrand(brand: string) {
-  const brandExists = sampleBrands[brand.toLowerCase()]
-  if (!brandExists) {
+  const prediction = await fetchPredictions(brand)
+  if (!prediction) {
     redirect(`/results/${brand}`)
   }
 }
@@ -16,7 +16,7 @@ export default async function AdvertisementPage(props: { params: BrandParams }) 
   const params = await props.params
   
   // Validate brand before rendering
-  validateBrand(params.brand)
+  await validateBrand(params.brand)
   
   return <AdvertisementClient brand={params.brand} />
 }
