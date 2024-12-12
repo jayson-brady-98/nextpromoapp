@@ -10,9 +10,15 @@ export function PopularSearches() {
     const searchTerm = search.trim().toLowerCase()
     const prediction = await fetchPredictions(searchTerm)
     
+    console.log('PopularSearches - Received prediction:', prediction)
+    console.log('PopularSearches - Type of prediction:', typeof prediction)
+    console.log('PopularSearches - Is prediction truthy?:', !!prediction)
+    
     if (prediction) {
+      console.log('PopularSearches - Routing to advertisement page')
       router.push(`/advertisement/${searchTerm}`)
     } else {
+      console.log('PopularSearches - Routing to results page')
       router.replace(`/results/${searchTerm}`)
     }
   }

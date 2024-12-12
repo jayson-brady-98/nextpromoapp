@@ -25,12 +25,18 @@ export function SearchBar() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (query.trim()) {
-      const searchTerm = query.trim().toLowerCase() // Normalize the search term
+      const searchTerm = query.trim().toLowerCase()
       const prediction = await fetchPredictions(searchTerm)
       
+      console.log('SearchBar - Received prediction:', prediction)
+      console.log('SearchBar - Type of prediction:', typeof prediction)
+      console.log('SearchBar - Is prediction truthy?:', !!prediction)
+      
       if (prediction) {
+        console.log('SearchBar - Routing to advertisement page')
         router.push(`/advertisement/${searchTerm}`)
       } else {
+        console.log('SearchBar - Routing to results page')
         router.replace(`/results/${searchTerm}`)
       }
     }
