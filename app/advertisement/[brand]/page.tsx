@@ -35,6 +35,10 @@ async function validateBrand(brand: string) {
 
 export default async function AdvertisementPage(props: { params: BrandParams }) {
   const params = await props.params
-  await validateBrand(params.brand.toLowerCase())
+  const brandData = await validateBrand(params.brand.toLowerCase())
+  // Store the validated data in sessionStorage before showing the advertisement
+  if (typeof window !== 'undefined') {
+    sessionStorage.setItem('brandData', JSON.stringify(brandData))
+  }
   return <AdvertisementClient brand={params.brand} />
 }

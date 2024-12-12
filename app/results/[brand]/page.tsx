@@ -35,7 +35,22 @@ function formatDateRange(startDate: string, endDate: string) {
 
 export default async function ResultsPage(props: { params: BrandParams }) {
   const params = await props.params
-  const brandData = await fetchPredictions(params.brand.toLowerCase())
+  
+  // Try to get stored data first if coming from advertisement page
+  let brandData
+  if (typeof window !== 'undefined') {
+    const storedData = sessionStorage.getItem('brandData')
+    if (storedData) {
+      brandData = JSON.parse(storedData)
+      sessionStorage.removeItem('brandData') // Clear after use
+    }
+  }
+  
+  // If no stored data, fetch it
+  if (!brandData) {
+    brandData = await fetchPredictions(params.brand.toLowerCase())
+  }
+  
   const previousSales = await fetchPreviousSales(params.brand.toLowerCase())
 
   if (!brandData) {
