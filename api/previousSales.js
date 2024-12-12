@@ -18,7 +18,6 @@ export async function fetchPreviousSales(brandQuery) {
       .select('sale_date, event, sale_discount')
       .ilike('brand', `%${brandQuery}%`)
       .lte('sale_date', currentDate)
-      .order('sale_date', { ascending: false })
 
     if (error) {
       console.error('Supabase error details:', error);

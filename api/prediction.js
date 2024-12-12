@@ -15,7 +15,7 @@ export async function fetchPredictions(brandQuery) {
     
     let { data, error } = await supabase
       .from('predictions')
-      .select('brand_name,sale_start_date,sale_end_date,yhat')
+      .select('brand_name,sale_start_date,sale_end_date,event,sitewide,yhat')
       .ilike('brand_name', `%${brandQuery}%`)
 
     console.log('Query response:', JSON.stringify({ data, error }, null, 2));
