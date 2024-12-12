@@ -158,6 +158,12 @@ export default async function ResultsPage(props: {
               <div className="divide-y divide-[#b39a55]">
                 {(() => {
                   console.log('Raw previous sales:', previousSales);
+                  
+                  if (!Array.isArray(previousSales)) {
+                    console.log('Previous sales is not an array:', previousSales);
+                    return <div>No previous sales data available</div>;
+                  }
+                  
                   const reducedSales = previousSales
                     .reduce((unique: SalePost[], post: SalePost) => {
                       // Convert current post date

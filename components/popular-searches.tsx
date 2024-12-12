@@ -16,7 +16,7 @@ export function PopularSearches() {
     
     if (prediction) {
       console.log('PopularSearches - Routing to advertisement page')
-      router.push(`/advertisement/${searchTerm}`)
+      router.push(`/advertisement/${searchTerm}?data=${encodeURIComponent(JSON.stringify(prediction))}`)
     } else {
       console.log('PopularSearches - Routing to results page')
       router.replace(`/results/${searchTerm}`)
