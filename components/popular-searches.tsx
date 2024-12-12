@@ -1,18 +1,19 @@
 'use client'
-
 import { useRouter } from 'next/navigation'
-import { popularSearches } from '@/lib/sample-data'
-import { sampleBrands } from '@/lib/sample-data'
+import { popularSearches } from '../lib/sample-data'
+import { fetchPredictions } from '@/api/prediction'
 
 export function PopularSearches() {
   const router = useRouter()
 
-  const handleClick = (search: string) => {
-    const brandExists = sampleBrands[search.toLowerCase()]
-    if (brandExists) {
-      router.push(`/advertisement/${search.toLowerCase()}`)
+  const handleClick = async (search: string) => {
+    const searchTerm = search.trim().toLowerCase()
+    const prediction = await fetchPredictions(searchTerm)
+    
+    if (prediction) {
+      router.push(`/advertisement/${searchTerm}`)
     } else {
-      router.replace(`/results/${search.toLowerCase()}`)
+      router.replace(`/results/${searchTerm}`)
     }
   }
 
@@ -20,7 +21,7 @@ export function PopularSearches() {
     <div className="mt-8 text-center">
       <div className="flex flex-wrap items-center justify-center gap-3">
         <span className="text-[#D2CAA6] font-semibold">Popular searches:</span>
-        {popularSearches.map((search) => (
+        {popularSearches.map((search: string) => (
           <button
             key={search}
             onClick={() => handleClick(search)}

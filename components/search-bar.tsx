@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Search } from 'lucide-react'
-import { sampleBrands } from '@/lib/sample-data'
+import { fetchPredictions } from '@/api/prediction'
 
 export function SearchBar() {
   const [query, setQuery] = useState('')
@@ -22,19 +22,24 @@ export function SearchBar() {
     return () => window.removeEventListener('resize', checkMobile)
   }, [])
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (query.trim()) {
-      // Check if brand exists in database
-      const brandExists = sampleBrands[query.toLowerCase()]
+      const searchTerm = query.trim().toLowerCase() // Normalize the search term
+      const prediction = await fetchPredictions(searchTerm)
       
-      if (brandExists) {
-        router.push(`/advertisement/${query.toLowerCase()}`)
+      if (prediction) {
+        router.push(`/advertisement/${searchTerm}`)
       } else {
-        router.replace(`/results/${query.toLowerCase()}`)
+        router.replace(`/results/${searchTerm}`)
       }
     }
   }
+
+  const handleSearch = async (searchQuery: string) => {
+    const nextPrediction = await fetchPredictions(searchQuery);
+    // Handle the prediction result (e.g., display it to the user)
+  };
 
   return (
     <form onSubmit={handleSubmit} className="w-full max-w-2xl mx-auto">
