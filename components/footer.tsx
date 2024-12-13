@@ -13,6 +13,12 @@ export function Footer() {
           Jayson Brady
         </a>
         <Coffee className="w-5 h-4 text-gray-400" />
+        • <a 
+          href="mailto:jaysonbrady123@gmail.com"
+          className="hover:text-[#E74753] transition-colors"
+        >
+          Contact
+        </a>
       </p>
     </footer>
   )
