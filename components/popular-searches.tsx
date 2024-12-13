@@ -26,12 +26,15 @@ export function PopularSearches() {
         
         sessionStorage.setItem('fullPredictionData', JSON.stringify(prediction))
         
-        router.push(`/advertisement/${searchTerm}?data=${encodeURIComponent(JSON.stringify(essentialData))}`)
+        await router.push(`/advertisement/${searchTerm}?data=${encodeURIComponent(JSON.stringify(essentialData))}`)
       } else {
-        router.replace(`/results/${searchTerm}`)
+        await router.replace(`/results/${searchTerm}`)
       }
-    } finally {
+      
       setLoadingSearch(null)
+    } catch (error) {
+      setLoadingSearch(null)
+      console.error('Navigation error:', error)
     }
   }
 
