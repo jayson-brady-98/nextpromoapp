@@ -14,13 +14,33 @@ export async function GET(request: Request) {
   }
 
   try {
-    const currentDate = new Date().toISOString()
+    const now = new Date()
+    const currentDate = `${String(now.getDate()).padStart(2, '0')}-${String(now.getMonth() + 1).padStart(2, '0')}-${now.getFullYear()}`
     
+    // First, let's try an exact match query to debug
+    const { data: exactMatch, error: exactError } = await supabase
+      .from('instagram_data')
+      .select('brand, sale_date, event, sale_discount')
+      .eq('brand', 'terra tonics')
+      .limit(1)
+    
+    console.log('Exact match attempt:', exactMatch)
+
+    // Then try our regular query
     const { data, error } = await supabase
       .from('instagram_data')
-      .select('sale_date, event, sale_discount')
-      .ilike('brand', `%${brandQuery}%`)
+      .select('brand, sale_date, event, sale_discount')
+      .or(`brand.eq.terra tonics,brand.ilike.%${brandQuery}%`)
       .lte('sale_date', currentDate)
+      .order('sale_date', { ascending: false })
+
+    console.log('Query parameters:', {
+      brandQuery,
+      decodedQuery: decodeURIComponent(brandQuery),
+      currentDate
+    })
+    
+    console.log('Query results:', data)
 
     if (error) throw error
     return NextResponse.json(data || [])

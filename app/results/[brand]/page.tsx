@@ -97,11 +97,11 @@ export default async function ResultsPage(props: {
   // Transform the necessary data
   const formattedData = {
     name: brandData.brand_name.replace(/\b\w/g, (c: string) => c.toUpperCase()),
-    nextSale: {
+    nextSale: brandData.sale_start_date ? {
       date: formatDateRange(brandData.sale_start_date, brandData.sale_end_date),
       probability: Math.round(brandData.yhat * 100),
       event: brandData.event
-    }
+    } : null
   }
 
   return (
@@ -122,20 +122,28 @@ export default async function ResultsPage(props: {
             <div className="p-8">
               <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-6">
                 <div>
-                  <h2 className="text-4xl font-bold text-[#E4434B]">Next {formattedData.name} Sale:</h2>
-                  <p className="text-[#CFCAA3] text-sm italic mt-0">
-                    Powered by coffee and discontent
+                  <h2 className="text-4xl font-bold text-[#E4434B]">Next Sale Prediction</h2>
+                  <p className="text-[#CFCAA3] text-base mt-0">
+                    For <span className="italic">{formattedData.name}</span>
                   </p>
                 </div>
                 <div className="flex items-start gap-3">
                   <Calendar className="w-14 h-14 text-[#b39a55]" />
-                  <div>
-                    <div className="flex flex-col">
-                      <p className="text-3xl font-bold text-[#b39a55] leading-none mb-1">{formattedData.nextSale.date}*</p>
-                      <p className="text-[#CFCAA3] text-lg">
-                        {formattedData.nextSale.event === "unknown" ? "Unknown sale event" : formattedData.nextSale.event}
+                  <div className="flex flex-col">
+                    {formattedData.nextSale ? (
+                      <>
+                        <p className="text-3xl font-bold text-[#b39a55] leading-none mb-1">
+                          {formattedData.nextSale.date}*
+                        </p>
+                        <p className="text-[#CFCAA3] text-lg">
+                          {formattedData.nextSale.event === "unknown" ? "Unknown sale event" : formattedData.nextSale.event}
+                        </p>
+                      </>
+                    ) : (
+                      <p className="text-3xl font-bold text-[#b39a55] leading-none mb-1">
+                        No sales predicted
                       </p>
-                    </div>
+                    )}
                     <div className="flex gap-2 mt-2">
                       <p className="inline-block bg-[#BDCEDA] px-2 py-0.5 rounded-md text-[#445B6C] text-xs font-semibold">
                         {getPredictionLabel(brandData.yhat)}
@@ -155,7 +163,7 @@ export default async function ResultsPage(props: {
           <section className="mt-8">
             <div className="p-8">
               <h2 className="text-3xl font-semibold mb-6 text-[#E4434B]">Previous {formattedData.name} Sales</h2>
-              <div className="divide-y divide-[#b39a55]">
+              <div className="divide-y divide-[#b39a55] border-b border-[#b39a55]">
                 {(() => {
                   console.log('Raw previous sales:', previousSales);
                   
