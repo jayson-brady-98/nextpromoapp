@@ -11,6 +11,7 @@ export function SearchBar() {
   const [query, setQuery] = useState('')
   const router = useRouter()
   const [isMobile, setIsMobile] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
     const checkMobile = () => {
@@ -24,21 +25,27 @@ export function SearchBar() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (query.trim()) {
-      const searchTerm = query.trim().toLowerCase()
-      const prediction = await fetchPredictions(searchTerm)
-      
-      console.log('SearchBar - Received prediction:', prediction)
-      console.log('SearchBar - Type of prediction:', typeof prediction)
-      console.log('SearchBar - Is prediction truthy?:', !!prediction)
-      
-      if (prediction) {
-        console.log('SearchBar - Routing to advertisement page')
-        router.push(`/advertisement/${searchTerm}?data=${encodeURIComponent(JSON.stringify(prediction))}`)
-      } else {
-        console.log('SearchBar - Routing to results page')
-        router.replace(`/results/${searchTerm}`)
+    setIsLoading(true)
+    
+    try {
+      if (query.trim()) {
+        const searchTerm = query.trim().toLowerCase()
+        const prediction = await fetchPredictions(searchTerm)
+        
+        console.log('SearchBar - Received prediction:', prediction)
+        console.log('SearchBar - Type of prediction:', typeof prediction)
+        console.log('SearchBar - Is prediction truthy?:', !!prediction)
+        
+        if (prediction) {
+          console.log('SearchBar - Routing to advertisement page')
+          router.push(`/advertisement/${searchTerm}?data=${encodeURIComponent(JSON.stringify(prediction))}`)
+        } else {
+          console.log('SearchBar - Routing to results page')
+          router.replace(`/results/${searchTerm}`)
+        }
       }
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -66,11 +73,19 @@ export function SearchBar() {
         />
         <Button
           type="submit"
-          className="absolute right-2 top-1/2 transform -translate-y-1/2 h-10 px-4 rounded-full 
+          disabled={isLoading}
+          className={`absolute right-2 top-1/2 transform -translate-y-1/2 h-10 px-4 rounded-full 
                      bg-[#E84753] hover:bg-[#E84753]/90 text-white/90
-                     transition-all duration-300"
+                     transition-all duration-300 ${isLoading ? 'opacity-75' : ''}`}
         >
-          Search brand
+          {isLoading ? (
+            <div className="flex items-center gap-2">
+              <span className="animate-spin">↻</span>
+              Searching...
+            </div>
+          ) : (
+            'Search brand'
+          )}
         </Button>
       </div>
     </form>
