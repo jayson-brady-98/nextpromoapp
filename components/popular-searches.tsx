@@ -1,25 +1,37 @@
 'use client'
 import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 import { popularSearches } from '../lib/sample-data'
 import { fetchPredictions } from '@/lib/api/prediction'
+import { TrendingUp } from 'lucide-react'
 
 export function PopularSearches() {
   const router = useRouter()
+  const [loadingSearch, setLoadingSearch] = useState<string | null>(null)
 
   const handleClick = async (search: string) => {
-    const searchTerm = search.trim().toLowerCase()
-    const prediction = await fetchPredictions(searchTerm)
+    setLoadingSearch(search)
     
-    console.log('PopularSearches - Received prediction:', prediction)
-    console.log('PopularSearches - Type of prediction:', typeof prediction)
-    console.log('PopularSearches - Is prediction truthy?:', !!prediction)
-    
-    if (prediction) {
-      console.log('PopularSearches - Routing to advertisement page')
-      router.push(`/advertisement/${searchTerm}?data=${encodeURIComponent(JSON.stringify(prediction))}`)
-    } else {
-      console.log('PopularSearches - Routing to results page')
-      router.replace(`/results/${searchTerm}`)
+    try {
+      const searchTerm = search.trim().toLowerCase()
+      const prediction = await fetchPredictions(searchTerm)
+      
+      if (prediction) {
+        const essentialData = {
+          brand_name: prediction.brand_name,
+          sale_start_date: prediction.sale_start_date,
+          sale_end_date: prediction.sale_end_date,
+          event: prediction.event
+        }
+        
+        sessionStorage.setItem('fullPredictionData', JSON.stringify(prediction))
+        
+        router.push(`/advertisement/${searchTerm}?data=${encodeURIComponent(JSON.stringify(essentialData))}`)
+      } else {
+        router.replace(`/results/${searchTerm}`)
+      }
+    } finally {
+      setLoadingSearch(null)
     }
   }
 
@@ -31,10 +43,15 @@ export function PopularSearches() {
           <button
             key={search}
             onClick={() => handleClick(search)}
-            className="px-6 py-2 rounded-full bg-sky-100/80 backdrop-blur-sm
-                       hover:bg-sky-200/80
-                       transition-all duration-300 text-gray-800"
+            disabled={loadingSearch !== null}
+            className={`px-6 py-2 rounded-full bg-sky-100/80 backdrop-blur-sm
+                       hover:bg-sky-200/80 disabled:opacity-75
+                       transition-all duration-300 text-gray-800
+                       ${loadingSearch === search ? 'relative pl-10' : ''}`}
           >
+            {loadingSearch === search && (
+              <TrendingUp className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 animate-spin" />
+            )}
             {search}
           </button>
         ))}
