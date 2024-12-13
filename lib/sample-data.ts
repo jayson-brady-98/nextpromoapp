@@ -1,5 +1,5 @@
 export const popularSearches = [
   'Gymshark',
-  'Adidas',
+  'Terra Tonics',
   'Zara',
 ]
