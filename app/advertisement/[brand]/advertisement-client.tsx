@@ -27,7 +27,7 @@ export function AdvertisementClient({ brand, brandData }: AdvertisementClientPro
         <div className="w-full max-w-2xl mx-auto text-center pt-6">
           <div className="mb-4">
             <h1 className="text-4xl font-bold text-[#E4434B] mb-4">
-              Predicting <span className="text-[#b39a55]">{decodeURIComponent(brand).replace(/\b\w/g, (c) => c.toUpperCase())}'s</span> most likelynext sale for you
+              Predicting <span className="text-[#b39a55]">{decodeURIComponent(brand).replace(/\b\w/g, (c) => c.toUpperCase())}'s</span> most likely next sale for you
             </h1>
             <div className="flex flex-col items-center gap-4">
               <div className="w-8 h-8 border-4 border-[#D2CAA6] border-t-transparent rounded-full animate-spin" />

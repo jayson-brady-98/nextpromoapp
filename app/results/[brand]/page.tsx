@@ -46,21 +46,28 @@ export default async function ResultsPage(props: {
   if (typeof window !== 'undefined') {
     const storedData = sessionStorage.getItem('brandData')
     if (storedData) {
+      console.log('Data from sessionStorage:', JSON.parse(storedData))
       brandData = JSON.parse(storedData)
-      sessionStorage.removeItem('brandData') // Clear after use
+      sessionStorage.removeItem('brandData')
     }
   }
   
   // If no stored data, check URL params
   if (!brandData && searchParams.data) {
+    console.log('Data from URL:', JSON.parse(decodeURIComponent(searchParams.data)))
     brandData = JSON.parse(decodeURIComponent(searchParams.data))
   }
   
   // If still no data, fetch it
   if (!brandData) {
+    console.log('Fetching fresh data...')
     brandData = await fetchPredictions(params.brand.toLowerCase())
+    console.log('Fresh data from API:', brandData)
   }
-  
+
+  // Log final brandData
+  console.log('Final brandData:', brandData)
+
   const previousSales = await fetchPreviousSales(params.brand.toLowerCase())
 
   if (!brandData) {
@@ -145,10 +152,12 @@ export default async function ResultsPage(props: {
                       </p>
                     )}
                     <div className="flex gap-2 mt-2">
-                      <p className="inline-block bg-[#BDCEDA] px-2 py-0.5 rounded-md text-[#445B6C] text-xs font-semibold">
-                        {getPredictionLabel(brandData.yhat)}
-                      </p>
-                      {brandData.sitewide === 1 && (
+                      {brandData?.yhat > 0.5 && (
+                        <p className="inline-block bg-[#BDCEDA] px-2 py-0.5 rounded-md text-[#445B6C] text-xs font-semibold">
+                          {getPredictionLabel(brandData.yhat)}
+                        </p>
+                      )}
+                      {brandData?.sitewide === 1 && (
                         <p className="inline-block bg-[#BDCEDA] px-2 py-0.5 rounded-md text-[#445B6C] text-xs font-semibold">
                           Sitewide
                         </p>

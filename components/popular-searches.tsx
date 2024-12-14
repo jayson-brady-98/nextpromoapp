@@ -21,7 +21,9 @@ export function PopularSearches() {
           brand_name: prediction.brand_name,
           sale_start_date: prediction.sale_start_date,
           sale_end_date: prediction.sale_end_date,
-          event: prediction.event
+          event: prediction.event,
+          yhat: prediction.yhat,
+          sitewide: prediction.sitewide
         }
         
         sessionStorage.setItem('fullPredictionData', JSON.stringify(prediction))
