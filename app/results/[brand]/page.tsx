@@ -80,10 +80,10 @@ export default async function ResultsPage(props: {
             </h1>
             <p className="text-xl mb-8">
               <a
-                href="mailto:jaysonbrady123@gmail.com"
+                href="https://jmbrady.notion.site/15c9d40c313680ddb05fe3ea25234631?pvs=105"
                 className="text-[#b39a55] hover:text-[#cfcaa3] transition-colors"
               >
-                Shoot me an email
+                Fill out this form
               </a>{" "}
               and I&apos;ll add it asap :)
             </p>
