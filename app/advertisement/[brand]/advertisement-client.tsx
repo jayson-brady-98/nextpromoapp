@@ -27,7 +27,7 @@ export function AdvertisementClient({ brand, brandData }: AdvertisementClientPro
         <div className="w-full max-w-2xl mx-auto text-center pt-6">
           <div className="mb-4">
             <h1 className="text-4xl font-bold text-[#E4434B] mb-4">
-              We're predicting <span className="text-[#b39a55]">{decodeURIComponent(brand).replace(/\b\w/g, (c) => c.toUpperCase())}'s</span> next sale for you
+              Predicting <span className="text-[#b39a55]">{decodeURIComponent(brand).replace(/\b\w/g, (c) => c.toUpperCase())}'s</span> most likelynext sale for you
             </h1>
             <div className="flex flex-col items-center gap-4">
               <div className="w-8 h-8 border-4 border-[#D2CAA6] border-t-transparent rounded-full animate-spin" />
@@ -40,11 +40,20 @@ export function AdvertisementClient({ brand, brandData }: AdvertisementClientPro
 
         {/* Advertisement Placeholder */}
         <div className="w-full max-w-4xl mx-auto">
-          <div className="relative w-full bg-white rounded-lg shadow-lg" style={{ paddingBottom: '56.25%' }}>
-            <div className="absolute inset-0 flex items-center justify-center text-gray-400 text-lg p-8">
-              Advertisement Placeholder
-            </div>
-          </div>
+          <a href="https://printernet.com" target="_blank" rel="noopener noreferrer">
+            {/* Desktop Image */}
+            <img 
+              src="/adCreatives/printernetDesktop.png"
+              alt="Print Advertisement"
+              className="hidden md:block w-full object-contain rounded-lg cursor-pointer"
+            />
+            {/* Mobile Image */}
+            <img 
+              src="/adCreatives/printernetMobile.png"
+              alt="Print Advertisement"
+              className="block md:hidden w-full object-contain rounded-lg cursor-pointer"
+            />
+          </a>
         </div>
       </main>
       <Footer />
