@@ -40,7 +40,7 @@ export function AdvertisementClient({ brand, brandData }: AdvertisementClientPro
 
         {/* Advertisement Placeholder */}
         <div className="w-full max-w-4xl mx-auto">
-          <a href="https://printernet.com" target="_blank" rel="noopener noreferrer">
+          <a href="https://getprinternet.com" target="_blank" rel="noopener noreferrer">
             {/* Desktop Image */}
             <img 
               src="/adCreatives/printernetDesktop.png"
