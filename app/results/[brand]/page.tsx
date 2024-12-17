@@ -142,9 +142,11 @@ export default async function ResultsPage(props: {
                         <p className="text-3xl font-bold text-[#b39a55] leading-none mb-1">
                           {formattedData.nextSale.date}*
                         </p>
-                        <p className="text-[#CFCAA3] text-lg">
-                          {formattedData.nextSale.event === "unknown" ? "Unknown sale event" : formattedData.nextSale.event}
-                        </p>
+                        {formattedData.nextSale.event && formattedData.nextSale.event !== "N/A" && (
+                          <p className="text-[#CFCAA3] text-lg">
+                            {formattedData.nextSale.event === "unknown" ? "Unknown sale event" : formattedData.nextSale.event}
+                          </p>
+                        )}
                       </>
                     ) : (
                       <p className="text-3xl font-bold text-[#b39a55] leading-none mb-1">
