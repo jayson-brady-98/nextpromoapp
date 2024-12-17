@@ -152,7 +152,7 @@ export default async function ResultsPage(props: {
                       </p>
                     )}
                     <div className="flex gap-2 mt-2">
-                      {brandData?.yhat > 0.5 && (
+                      {brandData?.yhat >= 0.3 && (
                         <p className="inline-block bg-[#BDCEDA] px-2 py-0.5 rounded-md text-[#445B6C] text-xs font-semibold">
                           {getPredictionLabel(brandData.yhat)}
                         </p>
@@ -198,11 +198,11 @@ export default async function ResultsPage(props: {
                         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
                         
                         // Only group sales if they're within 21 days AND have the same event name
-                        // or if one of them has an unknown event name
+                        // or if one of them has an empty event name
                         return diffDays <= 21 && (
                           p.event === post.event || 
-                          (p.event === "N/A" && post.event !== "N/A") ||
-                          (post.event === "N/A" && p.event !== "N/A")
+                          (!p.event && post.event) ||
+                          (!post.event && p.event)
                         );
                       });
                       
@@ -213,7 +213,7 @@ export default async function ResultsPage(props: {
                         });
                       } else {
                         // Update existing sale only if the new one has better information
-                        if (post.event !== "N/A" && existingSale.event === "N/A") {
+                        if (post.event && !existingSale.event) {
                           existingSale.event = post.event;
                         }
                         if (Number(post.sale_discount) > Number(existingSale.discount)) {
@@ -242,12 +242,12 @@ export default async function ResultsPage(props: {
                     >
                       <div className="flex flex-col">
                         <div className="text-lg font-semibold">
-                          {sale.event === "N/A" ? "Flash sale" : sale.event}
+                          {sale.event || "Flash sale"}
                         </div>
                         <div className="text-base font-normal opacity-80">{sale.sale_date}</div>
                       </div>
                       <div className="text-lg font-normal self-center">
-                        {sale.discount === "N/A" ? "Discount unknown" : `${sale.discount} off`}
+                        {sale.discount ? `${sale.discount} off` : "Discount unknown"}
                       </div>
                     </div>
                   ));
