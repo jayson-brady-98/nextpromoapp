@@ -76,16 +76,17 @@ export default async function ResultsPage(props: {
         <main className="flex-grow flex flex-col items-center justify-center p-4">
           <div className="w-full max-w-2xl mx-auto text-center">
             <h1 className="text-3xl font-bold mb-4">
-              Sorry, I haven&apos;t added &quot;{decodeURIComponent(params.brand).replace(/\b\w/g, (c) => c.toUpperCase())}&quot; to the database yet
+              Please double-check your spelling of &quot;{decodeURIComponent(params.brand).replace(/\b\w/g, (c) => c.toUpperCase())}&quot; and try again
             </h1>
             <p className="text-xl mb-8">
+              If your spelling is correct,{" "}
               <a
                 href="https://jmbrady.notion.site/15c9d40c313680ddb05fe3ea25234631?pvs=105"
                 className="text-[#b39a55] hover:text-[#cfcaa3] transition-colors"
               >
-                Fill out this form
+                 please fill out this form
               </a>{" "}
-              and I&apos;ll add it asap :)
+              and I&apos;ll add &quot;{decodeURIComponent(params.brand).replace(/\b\w/g, (c) => c.toUpperCase())}&quot; to the database asap :)
             </p>
             <Link
               href="/"

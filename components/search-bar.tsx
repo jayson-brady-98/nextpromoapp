@@ -66,8 +66,8 @@ export function SearchBar() {
                      placeholder:text-[#182A39]/60 !placeholder:text-base placeholder:leading-[1.5] placeholder:align-middle
                      focus:ring-2 focus:ring-[#AF9550]/20 focus:border-[#AF9550]/50"
           placeholder={isMobile 
-            ? "Discover upcoming sales" 
-            : "Discover upcoming sales on your favorite brands"}
+            ? "Search upcoming discounts" 
+            : "Search upcoming discounts on your favorite brands"}
           value={query}
           onChange={(e) => setQuery(e.target.value)}
         />
