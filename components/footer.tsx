@@ -12,12 +12,19 @@ export function Footer() {
         >
           Jayson Brady
         </a>
-        <Coffee className="w-5 h-4 text-gray-400" />
         • <a 
           href="https://jmbrady.notion.site/15c9d40c31368064bd60f6fa9e6ae899?pvs=105"
           className="hover:text-[#E74753] transition-colors"
         >
           Contact
+        </a>
+        • <a 
+          href="https://jmbrady.notion.site/1719d40c3136808da540eac64f3fb08c?pvs=105"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="hover:text-[#E74753] transition-colors"
+        >
+          Apply to Advertise
         </a>
       </p>
     </footer>
