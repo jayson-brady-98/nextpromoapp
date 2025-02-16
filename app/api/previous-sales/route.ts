@@ -19,8 +19,8 @@ export async function GET(request: Request) {
     
     // First, let's try an exact match query to debug
     const { data: exactMatch, error: exactError } = await supabase
-      .from('instagram_data')
-      .select('brand, sale_date, event, sale_discount')
+      .from('previous_sales')
+      .select('brand, event, sitewide, discount, start_date, end_date')
       .eq('brand', 'terra tonics')
       .limit(1)
     
@@ -28,11 +28,10 @@ export async function GET(request: Request) {
 
     // Then try our regular query
     const { data, error } = await supabase
-      .from('instagram_data')
-      .select('brand, sale_date, event, sale_discount')
-      .or(`brand.eq.terra tonics,brand.ilike.%${brandQuery}%`)
-      .lte('sale_date', currentDate)
-      .order('sale_date', { ascending: false })
+      .from('previous_sales')
+      .select('brand, event, sitewide, discount, start_date, end_date')
+      .ilike('brand', `%${brandQuery}%`)
+      .order('start_date', { ascending: false })
 
     console.log('Query parameters:', {
       brandQuery,
@@ -43,7 +42,18 @@ export async function GET(request: Request) {
     console.log('Query results:', data)
 
     if (error) throw error
-    return NextResponse.json(data || [])
+
+    // Transform the data to match the expected format
+    const transformedData = data?.map(sale => ({
+      brand: sale.brand,
+      event: sale.event,
+      sitewide: sale.sitewide === 1, // Convert to boolean
+      discount: sale.discount,
+      start_date: sale.start_date,
+      end_date: sale.end_date
+    })) || []
+
+    return NextResponse.json(transformedData)
   } catch (error) {
     console.error('Error fetching previous sales:', error)
     return NextResponse.json({ error: 'Failed to fetch previous sales' }, { status: 500 })

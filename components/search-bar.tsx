@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Search } from 'lucide-react'
-import { fetchPredictions } from '@/lib/api/prediction'
+import { fetchPreviousSales } from '@/lib/api/previousSales'
 
 export function SearchBar() {
   const [query, setQuery] = useState('')
@@ -30,29 +30,20 @@ export function SearchBar() {
     try {
       if (query.trim()) {
         const searchTerm = query.trim().toLowerCase()
-        const prediction = await fetchPredictions(searchTerm)
+        const previousSales = await fetchPreviousSales(searchTerm)
         
-        console.log('SearchBar - Received prediction:', prediction)
-        console.log('SearchBar - Type of prediction:', typeof prediction)
-        console.log('SearchBar - Is prediction truthy?:', !!prediction)
-        
-        if (prediction) {
-          console.log('SearchBar - Routing to advertisement page')
-          router.push(`/advertisement/${searchTerm}?data=${encodeURIComponent(JSON.stringify(prediction))}`)
+        if (previousSales && previousSales.length > 0) {
+          // If the brand exists in previous_sales, show advertisement
+          await router.push(`/advertisement/${searchTerm}`)
         } else {
-          console.log('SearchBar - Routing to results page')
-          router.replace(`/results/${searchTerm}`)
+          // If brand doesn't exist, go directly to results
+          await router.replace(`/results/${searchTerm}`)
         }
       }
     } finally {
       setIsLoading(false)
     }
   }
-
-  const handleSearch = async (searchQuery: string) => {
-    const nextPrediction = await fetchPredictions(searchQuery);
-    // Handle the prediction result (e.g., display it to the user)
-  };
 
   return (
     <form onSubmit={handleSubmit} className="w-full max-w-2xl mx-auto">
@@ -66,8 +57,8 @@ export function SearchBar() {
                      placeholder:text-[#182A39]/60 !placeholder:text-base placeholder:leading-[1.5] placeholder:align-middle
                      focus:ring-2 focus:ring-[#AF9550]/20 focus:border-[#AF9550]/50"
           placeholder={isMobile 
-            ? "Search upcoming discounts" 
-            : "Search upcoming discounts on your favorite brands"}
+            ? "Find when brands have sales" 
+            : "Find when brands have sales"}
           value={query}
           onChange={(e) => setQuery(e.target.value)}
         />
@@ -76,7 +67,7 @@ export function SearchBar() {
           disabled={isLoading}
           className={`absolute right-2 top-1/2 transform -translate-y-1/2 h-10 px-4 rounded-full 
                      bg-[#E84753] hover:bg-[#E84753]/90 text-white/90
-                     transition-all duration-300 ${isLoading ? 'opacity-75' : ''}`}
+                     transition-all duration-300 text-[15px] ${isLoading ? 'opacity-75' : ''}`}
         >
           {isLoading ? (
             <div className="flex items-center gap-2">
@@ -84,7 +75,7 @@ export function SearchBar() {
               Searching...
             </div>
           ) : (
-            'Search brand'
+            'Search'
           )}
         </Button>
       </div>

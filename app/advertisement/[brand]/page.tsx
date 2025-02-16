@@ -10,43 +10,43 @@ const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 const supabase = createClient(supabaseUrl, supabaseKey)
 
 async function validateBrand(brand: string) {
-  console.log('AdvertisementPage - Validating brand:', brand)
+  console.log("AdvertisementPage - Validating brand:", brand)
   
   try {
+    // Switch from .single() to a list-based check:
     const { data, error } = await supabase
-      .from('predictions')
-      .select('*')
-      .ilike('brand_name', `%${brand}%`)
-      .single()
+      .from("previous_sales")
+      .select("*")
+      .ilike("brand", `%${brand}%`)
+
+    console.log("AdvertisementPage - Supabase response:", { data, error })
     
-    console.log('AdvertisementPage - Supabase response:', { data, error })
-    
-    if (error || !data) {
-      console.log('AdvertisementPage - Redirecting to results due to:', error || 'No data')
+    if (error || !data || data.length === 0) {
+      console.log("AdvertisementPage - Redirecting to results due to:", error || "No data")
       redirect(`/results/${brand}`)
     }
     
-    console.log('AdvertisementPage - Validation passed')
+    console.log("AdvertisementPage - Validation passed")
     return data
   } catch (error) {
-    console.error('AdvertisementPage - Error:', error)
+    console.error("AdvertisementPage - Error:", error)
     redirect(`/results/${brand}`)
   }
 }
 
 export default async function AdvertisementPage(props: {
-  params: BrandParams;
-  searchParams: SearchParams;
+  params: BrandParams
+  searchParams: SearchParams
 }) {
   const params = await props.params
   const searchParams = await props.searchParams
-  let brandData
 
+  let brandData
   if (searchParams.data) {
-    // Use the data passed from the search
+    // Use any data passed from the search
     brandData = JSON.parse(decodeURIComponent(searchParams.data))
   } else {
-    // Fallback to fetching if needed
+    // Fallback: validate the brand by looking for it in previous_sales
     brandData = await validateBrand(params.brand.toLowerCase())
   }
 

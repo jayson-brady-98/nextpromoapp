@@ -1,38 +1,24 @@
-import { fetchPredictions } from '@/lib/api/prediction'
-import { getPredictionLabel } from '@/lib/api/predictionLabel'
 import { fetchPreviousSales } from '@/lib/api/previousSales'
 import { Footer } from '@/components/footer'
 import Link from 'next/link'
-import { Search, Calendar} from 'lucide-react'
+import { Search } from 'lucide-react'
+import { SalesChart } from '@/components/SalesChart'
+import { CalendarIcon, SparklesIcon, BanknotesIcon, ShoppingBagIcon } from '@heroicons/react/24/outline'
+import { useState } from 'react'
+import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/outline'
+import { YearSalesToggle } from '@/components/YearSalesToggle'
 
-type SalePost = {
-  sale_date: string;
+export type Sale = {
+  start_date: string;
+  end_date: string;
   event: string;
-  sale_discount: string;
+  sitewide: boolean;
   discount: string;
+  brand: string;
 }
 
 type BrandParams = Promise<{ brand: string }>
-type SearchParams = Promise<{ data?: string }>
-
-function formatDateRange(startDate: string, endDate: string) {
-  const start = new Date(startDate)
-  const end = new Date(endDate)
-  
-  // Format options for dates
-  const options: Intl.DateTimeFormatOptions = {
-    month: 'long',
-    day: 'numeric'
-  }
-
-  // If dates are the same, return single date
-  if (startDate === endDate) {
-    return start.toLocaleDateString('en-US', options)
-  }
-  
-  // If different dates, return range
-  return `${start.toLocaleDateString('en-US', options)} - ${end.toLocaleDateString('en-US', options)}`
-}
+type SearchParams = Promise<Record<string, string | string[] | undefined>>
 
 export default async function ResultsPage(props: {
   params: BrandParams;
@@ -41,50 +27,24 @@ export default async function ResultsPage(props: {
   const params = await props.params
   const searchParams = await props.searchParams
   
-  // Try to get stored data first if coming from advertisement page
-  let brandData
-  if (typeof window !== 'undefined') {
-    const storedData = sessionStorage.getItem('brandData')
-    if (storedData) {
-      console.log('Data from sessionStorage:', JSON.parse(storedData))
-      brandData = JSON.parse(storedData)
-      sessionStorage.removeItem('brandData')
-    }
-  }
-  
-  // If no stored data, check URL params
-  if (!brandData && searchParams.data) {
-    console.log('Data from URL:', JSON.parse(decodeURIComponent(searchParams.data)))
-    brandData = JSON.parse(decodeURIComponent(searchParams.data))
-  }
-  
-  // If still no data, fetch it
-  if (!brandData) {
-    console.log('Fetching fresh data...')
-    brandData = await fetchPredictions(params.brand.toLowerCase())
-    console.log('Fresh data from API:', brandData)
-  }
-
-  // Log final brandData
-  console.log('Final brandData:', brandData)
-
   const previousSales = await fetchPreviousSales(params.brand.toLowerCase())
 
-  if (!brandData) {
+  const sales: Sale[] = Array.isArray(previousSales) ? previousSales : []
+
+  if (!previousSales || previousSales.length === 0) {
     return (
       <div className="min-h-screen flex flex-col bg-[#182A39]">
         <main className="flex-grow flex flex-col items-center justify-center p-4">
           <div className="w-full max-w-2xl mx-auto text-center">
             <h1 className="text-3xl font-bold mb-4">
-              Please double-check your spelling of &quot;{decodeURIComponent(params.brand).replace(/\b\w/g, (c) => c.toUpperCase())}&quot; and try again
+              Sorry, I haven't added &quot;{decodeURIComponent(params.brand).replace(/\b\w/g, (c) => c.toUpperCase())}&quot; yet
             </h1>
             <p className="text-xl mb-8">
-              If your spelling is correct,{" "}
               <a
                 href="https://jmbrady.notion.site/15c9d40c313680ddb05fe3ea25234631?pvs=105"
                 className="text-[#b39a55] hover:text-[#cfcaa3] transition-colors"
               >
-                 please fill out this form
+                 Please fill out this form
               </a>{" "}
               and I&apos;ll add &quot;{decodeURIComponent(params.brand).replace(/\b\w/g, (c) => c.toUpperCase())}&quot; to the database asap :)
             </p>
@@ -102,21 +62,15 @@ export default async function ResultsPage(props: {
     )
   }
 
-  // Transform the necessary data
   const formattedData = {
-    name: brandData.brand_name.replace(/\b\w/g, (c: string) => c.toUpperCase()),
-    nextSale: brandData.sale_start_date ? {
-      date: formatDateRange(brandData.sale_start_date, brandData.sale_end_date),
-      probability: Math.round(brandData.yhat * 100),
-      event: brandData.event
-    } : null
+    name: decodeURIComponent(params.brand).replace(/\b\w/g, (c: string) => c.toUpperCase())
   }
 
   return (
     <div className="min-h-screen flex flex-col bg-[#182A39]">
       <main className="flex-grow">
         <div className="w-full max-w-4xl mx-auto p-4">
-          <div className="mb-8 px-8">
+          <div className="mb-8 px-8 flex justify-center">
             <Link
               href="/"
               className="inline-flex items-center text-gray-400 hover:text-gray-300 transition-colors"
@@ -126,143 +80,137 @@ export default async function ResultsPage(props: {
             </Link>
           </div>
 
-          <section className="mb-2">
-            <div className="p-8">
+          <section>
+            <div className="p-4">
               <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-6">
-                <div>
-                  <h2 className="text-4xl font-bold text-[#E4434B]">Next Sale Prediction</h2>
-                  <p className="text-[#CFCAA3] text-base mt-0">
-                    For <span className="italic">{formattedData.name}</span>
-                  </p>
+                <div className="w-full">
+                  <h1 className="text-4xl font-bold text-[#E4434B] text-center">
+                    Previous {formattedData.name} Sales
+                  </h1>
+                  <h2 className="text-sm text-center text-[#CFCAA3] mt-1">Based on available data</h2>
                 </div>
-                <div className="flex items-start gap-3">
-                  <Calendar className="w-14 h-14 text-[#b39a55]" />
-                  <div className="flex flex-col">
-                    {formattedData.nextSale ? (
-                      <>
-                        <p className="text-3xl font-bold text-[#b39a55] leading-none mb-1">
-                          {formattedData.nextSale.date}*
-                        </p>
-                        {formattedData.nextSale.event && formattedData.nextSale.event !== "N/A" && (
-                          <p className="text-[#CFCAA3] text-lg">
-                            {formattedData.nextSale.event === "unknown" ? "Unknown sale event" : formattedData.nextSale.event}
-                          </p>
-                        )}
-                      </>
-                    ) : (
-                      <p className="text-3xl font-bold text-[#b39a55] leading-none mb-1">
-                        No sales predicted
-                      </p>
-                    )}
-                    <div className="flex gap-2 mt-2">
-                      {brandData?.yhat >= 0.3 && (
-                        <p className="inline-block bg-[#BDCEDA] px-2 py-0.5 rounded-md text-[#445B6C] text-xs font-semibold">
-                          {getPredictionLabel(brandData.yhat)}
-                        </p>
-                      )}
-                      {brandData?.sitewide === 1 && (
-                        <p className="inline-block bg-[#BDCEDA] px-2 py-0.5 rounded-md text-[#445B6C] text-xs font-semibold">
-                          Sitewide
-                        </p>
-                      )}
+              </div>
+            </div>
+          </section>
+
+          <section className="mt-4">
+            <div className="p-4">
+              <div className="bg-white/5 p-6 rounded-lg h-[400px] md:h-[500px] w-full overflow-x-auto">
+                <div className="min-w-[600px]">
+                  {!Array.isArray(previousSales) ? (
+                    <div className="text-[#CFCAA3]">No previous sales data available</div>
+                  ) : (
+                    <SalesChart previousSales={previousSales} />
+                  )}
+                </div>
+              </div>
+              <p className="text-sm text-center text-[#CFCAA3] mt-2">
+                Note: Dates are formatted as DD/MM/YYYY
+              </p>
+            </div>
+          </section>
+
+          {/* New Sale Frequency Section */}
+          <section className="mt-4">
+            <div className="p-4">
+              <div className="bg-white/5 p-6 rounded-lg">
+                {Array.isArray(previousSales) && (
+                  <>
+                    <div className="flex flex-col items-center justify-center gap-4 sm:flex-row sm:items-center sm:justify-center sm:gap-8">
+                      {/* Icon on the left */}
+                      {(() => {
+                        const recentSales = sales.filter((sale) => {
+                          const year = parseInt(sale.start_date.split('/')[2])
+                          return year >= 2022
+                        })
+                        const salesPerYear = recentSales.length / 2
+
+                        if (salesPerYear >= 8) {
+                          return <BanknotesIcon className="w-16 h-16 text-green-500" />
+                        } else if (salesPerYear >= 4) {
+                          return <ShoppingBagIcon className="w-16 h-16 text-pink-500" />
+                        } else if (salesPerYear >= 1) {
+                          return <CalendarIcon className="w-16 h-16 text-[#CFCAA3]" />
+                        } else {
+                          return <SparklesIcon className="w-16 h-16 text-yellow-400" />
+                        }
+                      })()}
+
+                      {/* Text content on the right, but still centered */}
+                      <div className="text-center space-y-2 max-w-xl">
+                        <div className="flex flex-col items-center gap-2 sm:flex-row sm:justify-center">
+                          <h2 className="text-xl sm:text-2xl font-bold text-[#E4434B]">
+                            Sale Frequency:
+                          </h2>
+                          <span className="text-xl sm:text-2xl font-bold text-[#CFCAA3]">
+                            {(() => {
+                              const recentSales = sales.filter((sale) => {
+                                const year = parseInt(sale.start_date.split('/')[2])
+                                return year >= 2022
+                              })
+                              const salesPerYear = recentSales.length / 2
+
+                              if (salesPerYear >= 8) return 'High-Frequency'
+                              if (salesPerYear >= 4) return 'Moderate-Frequency'
+                              if (salesPerYear >= 1) return 'Low-Frequency'
+                              return 'Rare'
+                            })()}
+                          </span>
+                        </div>
+                        <div className="text-[#CFCAA3]/80">
+                          {(() => {
+                            const recentSales = sales.filter((sale) => {
+                              const year = parseInt(sale.start_date.split('/')[2])
+                              return year >= 2022
+                            })
+                            const salesPerYear = recentSales.length / 2
+
+                            if (salesPerYear >= 8) {
+                              return '${formattedData.name} offers discounts frequently throughout the year'
+                            } else if (salesPerYear >= 4) {
+                              return '${formattedData.name} offers discounts a few times a year'
+                            } else if (salesPerYear >= 1) {
+                              return '${formattedData.name} offers discounts once or twice a year'
+                            } else {
+                              return `${formattedData.name} offers discounts once in a blue moon`
+                            }
+                          })()}
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
+                  </>
+                )}
               </div>
             </div>
           </section>
 
           <section className="mt-8">
             <div className="p-8">
-              <h2 className="text-3xl font-semibold mb-6 text-[#E4434B]">Previous {formattedData.name} Sales</h2>
-              <div className="divide-y divide-[#b39a55] border-b border-[#b39a55]">
-                {(() => {
-                  console.log('Raw previous sales:', previousSales);
-                  
-                  if (!Array.isArray(previousSales)) {
-                    console.log('Previous sales is not an array:', previousSales);
-                    return <div>No previous sales data available</div>;
-                  }
-                  
-                  const reducedSales = previousSales
-                    .reduce((unique: SalePost[], post: SalePost) => {
-                      // Convert current post date
-                      const [day, month, year] = post.sale_date.split('-');
-                      const currentDate = new Date(`${year}-${month}-${day}`);
-                      
-                      // Check if we already have a similar sale
-                      const existingSale = unique.find(p => {
-                        // Convert existing sale date
-                        const [eDay, eMonth, eYear] = p.sale_date.split('-');
-                        const existingDate = new Date(`${eYear}-${eMonth}-${eDay}`);
-                        
-                        // Calculate date difference in days
-                        const diffTime = Math.abs(existingDate.getTime() - currentDate.getTime());
-                        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                        
-                        // Only group sales if they're within 21 days AND have the same event name
-                        // or if one of them has an empty event name
-                        return diffDays <= 21 && (
-                          p.event === post.event || 
-                          (!p.event && post.event) ||
-                          (!post.event && p.event)
-                        );
-                      });
-                      
-                      if (!existingSale) {
-                        unique.push({
-                          ...post,
-                          discount: post.sale_discount
-                        });
-                      } else {
-                        // Update existing sale only if the new one has better information
-                        if (post.event && !existingSale.event) {
-                          existingSale.event = post.event;
-                        }
-                        if (Number(post.sale_discount) > Number(existingSale.discount)) {
-                          existingSale.discount = post.sale_discount;
-                        }
-                      }
-                      return unique;
-                    }, [] as SalePost[]);
-                  
-                  console.log('After reduction:', reducedSales);
-                  
-                  const sortedSales = reducedSales.sort((a: SalePost, b: SalePost) => {
-                    const [dayA, monthA, yearA] = a.sale_date.split('-');
-                    const [dayB, monthB, yearB] = b.sale_date.split('-');
-                    const dateA = new Date(`${yearA}-${monthA}-${dayA}`);
-                    const dateB = new Date(`${yearB}-${monthB}-${dayB}`);
-                    return dateB.getTime() - dateA.getTime();
-                  });
-                  
-                  console.log('After sorting:', sortedSales);
-                  
-                  return sortedSales.slice(0, 10).map((sale: SalePost) => (
-                    <div
-                      key={`${sale.sale_date}-${sale.event}`}
-                      className="flex justify-between py-4 text-[#CFCAA3]"
-                    >
-                      <div className="flex flex-col">
-                        <div className="text-lg font-semibold">
-                          {sale.event || "Flash sale"}
-                        </div>
-                        <div className="text-base font-normal opacity-80">{sale.sale_date}</div>
-                      </div>
-                      <div className="text-lg font-normal self-center">
-                        {sale.discount ? `${sale.discount} off` : "Discount unknown"}
-                      </div>
-                    </div>
-                  ));
-                })()}
+              <div className="grid grid-cols-[repeat(auto-fit,minmax(100px,max-content))] gap-6">
+                {Object.entries(
+                  sales
+                    .sort((a, b) => {
+                      const [dayA, monthA, yearA] = a.start_date.split('/');
+                      const [dayB, monthB, yearB] = b.start_date.split('/');
+                      const dateA = new Date(Number(yearA), Number(monthA) - 1, Number(dayA));
+                      const dateB = new Date(Number(yearB), Number(monthB) - 1, Number(dayB));
+                      return dateB.getTime() - dateA.getTime();
+                    })
+                    .reduce((groups: Record<string, Sale[]>, sale) => {
+                      const year = sale.start_date.split('/')[2];
+                      if (!groups[year]) groups[year] = [];
+                      groups[year].push(sale);
+                      return groups;
+                    }, {})
+                ).sort(([yearA], [yearB]) => Number(yearB) - Number(yearA))
+                  .map(([year, yearSales]) => (
+                    <YearSalesToggle key={year} year={year} yearSales={yearSales} />
+                  ))}
               </div>
             </div>
           </section>
         </div>
       </main>
-      <p className="text-[#CFCAA3] text-sm italic p-8 text-center">
-        *Predictions may be incorrect. User discretion is advised.
-      </p>
       <Footer />
     </div>
   )
