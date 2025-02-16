@@ -10,26 +10,26 @@ const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 const supabase = createClient(supabaseUrl, supabaseKey)
 
 async function validateBrand(brand: string) {
-  console.log("AdvertisementPage - Validating brand:", brand)
+  console.log("1. Starting brand validation for:", brand)
   
   try {
-    // Switch from .single() to a list-based check:
+    console.log("2. About to query Supabase with brand:", brand)
     const { data, error } = await supabase
       .from("previous_sales")
       .select("*")
       .ilike("brand", `%${brand}%`)
 
-    console.log("AdvertisementPage - Supabase response:", { data, error })
+    console.log("3. Supabase response:", { data, error })
     
     if (error || !data || data.length === 0) {
-      console.log("AdvertisementPage - Redirecting to results due to:", error || "No data")
+      console.log("4a. Redirecting to results because:", error || "No data found")
       redirect(`/results/${brand}`)
     }
     
-    console.log("AdvertisementPage - Validation passed")
+    console.log("4b. Validation passed, returning data")
     return data
   } catch (error) {
-    console.error("AdvertisementPage - Error:", error)
+    console.error("5. Error during validation:", error)
     redirect(`/results/${brand}`)
   }
 }
