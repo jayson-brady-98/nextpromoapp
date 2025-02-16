@@ -17,16 +17,6 @@ export async function GET(request: Request) {
     const now = new Date()
     const currentDate = `${String(now.getDate()).padStart(2, '0')}-${String(now.getMonth() + 1).padStart(2, '0')}-${now.getFullYear()}`
     
-    // First, let's try an exact match query to debug
-    const { data: exactMatch, error: exactError } = await supabase
-      .from('previous_sales')
-      .select('brand, event, sitewide, discount, start_date, end_date')
-      .eq('brand', 'terra tonics')
-      .limit(1)
-    
-    console.log('Exact match attempt:', exactMatch)
-
-    // Then try our regular query
     const { data, error } = await supabase
       .from('previous_sales')
       .select('brand, event, sitewide, discount, start_date, end_date')
