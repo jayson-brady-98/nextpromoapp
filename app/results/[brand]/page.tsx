@@ -4,8 +4,6 @@ import Link from 'next/link'
 import { Search } from 'lucide-react'
 import { SalesChart } from '@/components/SalesChart'
 import { CalendarIcon, SparklesIcon, BanknotesIcon, ShoppingBagIcon } from '@heroicons/react/24/outline'
-import { useState } from 'react'
-import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/outline'
 import { YearSalesToggle } from '@/components/YearSalesToggle'
 
 export type Sale = {
@@ -172,7 +170,7 @@ export default async function ResultsPage(props: {
                             } else if (salesPerYear >= 1) {
                               return '${formattedData.name} offers discounts once or twice a year'
                             } else {
-                              return `${formattedData.name} offers discounts once in a blue moon`
+                              return '${formattedData.name} offers discounts once in a blue moon'
                             }
                           })()}
                         </div>
