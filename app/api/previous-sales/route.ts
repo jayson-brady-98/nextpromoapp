@@ -46,8 +46,6 @@ export async function GET(request: Request) {
       end_date: sale.end_date
     })) || []
 
-    console.log('Transformed data:', transformedData)
-
     return NextResponse.json(transformedData)
   } catch (error) {
     console.error('Error fetching previous sales:', error)
