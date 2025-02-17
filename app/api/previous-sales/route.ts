@@ -17,6 +17,9 @@ export async function GET(request: Request) {
     const now = new Date()
     const currentDate = `${String(now.getDate()).padStart(2, '0')}-${String(now.getMonth() + 1).padStart(2, '0')}-${now.getFullYear()}`
     
+    console.log("*** BrandQuery ***", brandQuery)
+    console.log("*** Database URL ***", supabaseUrl)
+    
     const { data, error } = await supabase
       .from('previous_sales')
       .select('brand, event, sitewide, discount, start_date, end_date')
