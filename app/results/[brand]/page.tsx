@@ -27,6 +27,8 @@ export default async function ResultsPage(props: {
   
   const previousSales = await fetchPreviousSales(params.brand.toLowerCase())
 
+  console.log('Previous sales data:', previousSales);
+
   const sales: Sale[] = Array.isArray(previousSales) ? previousSales : []
 
   if (!previousSales || previousSales.length === 0) {
