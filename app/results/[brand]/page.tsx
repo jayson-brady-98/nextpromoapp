@@ -164,13 +164,13 @@ export default async function ResultsPage(props: {
                             const salesPerYear = recentSales.length / 2
 
                             if (salesPerYear >= 8) {
-                              return '${formattedData.name} offers discounts frequently throughout the year'
+                              return `${formattedData.name} offers discounts frequently throughout the year`
                             } else if (salesPerYear >= 4) {
-                              return '${formattedData.name} offers discounts a few times a year'
+                              return `${formattedData.name} offers discounts a few times a year`
                             } else if (salesPerYear >= 1) {
-                              return '${formattedData.name} offers discounts once or twice a year'
+                              return `${formattedData.name} offers discounts once or twice a year`
                             } else {
-                              return '${formattedData.name} offers discounts once in a blue moon'
+                              return `${formattedData.name} offers discounts once in a blue moon`
                             }
                           })()}
                         </div>
