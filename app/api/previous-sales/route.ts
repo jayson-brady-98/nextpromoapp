@@ -14,39 +14,36 @@ export async function GET(request: Request) {
   }
 
   try {
-    const now = new Date()
-    const currentDate = `${String(now.getDate()).padStart(2, '0')}-${String(now.getMonth() + 1).padStart(2, '0')}-${now.getFullYear()}`
-    
-    console.log("*** BrandQuery ***", brandQuery)
-    console.log("*** Database URL ***", supabaseUrl)
-    
-    const { data, error } = await supabase
+    // 1. Split the query into words
+    const searchWords = brandQuery.toLowerCase().trim().split(/\s+/)
+
+    // 2. Start a Supabase query
+    let supabaseQuery = supabase
       .from('previous_sales')
       .select('brand, event, sitewide, discount, start_date, end_date')
-      .ilike('brand', `%${brandQuery}%`)
-      .order('start_date', { ascending: false })
 
-    console.log('Query parameters:', {
-      brandQuery,
-      decodedQuery: decodeURIComponent(brandQuery),
-      currentDate
+    // 3. For each word, chain an .ilike condition
+    //    By default, multiple .ilike() calls are combined with logical AND
+    searchWords.forEach(word => {
+      supabaseQuery = supabaseQuery.ilike('brand', `%${word}%`)
     })
-    
-    console.log('Query results:', data)
 
+    // 4. Finally, order the result
+    supabaseQuery = supabaseQuery.order('start_date', { ascending: false })
+
+    // 5. Execute the query
+    const { data, error } = await supabaseQuery
     if (error) throw error
 
-    // Transform the data to match the expected format
+    // 6. Transform if needed
     const transformedData = data?.map(sale => ({
       brand: sale.brand,
       event: sale.event,
-      sitewide: sale.sitewide === 1, // Convert to boolean
+      sitewide: sale.sitewide === 1,
       discount: sale.discount,
       start_date: sale.start_date,
       end_date: sale.end_date
     })) || []
-
-    console.log('Transformed data:', transformedData)
 
     return NextResponse.json(transformedData)
   } catch (error) {
