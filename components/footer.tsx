@@ -24,7 +24,7 @@ export function Footer() {
           rel="noopener noreferrer"
           className="hover:text-[#E74753] transition-colors"
         >
-          Apply to Advertise
+          Apply to advertise
         </a>
       </p>
     </footer>
