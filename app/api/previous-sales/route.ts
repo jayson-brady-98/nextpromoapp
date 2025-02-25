@@ -14,25 +14,17 @@ export async function GET(request: Request) {
   }
 
   try {
-    // 1. Split the query into words
-    const searchWords = brandQuery.toLowerCase().trim().split(/\s+/)
+    const searchTerm = brandQuery.toLowerCase().trim()
+    console.log('Searching for brand:', searchTerm)
 
-    // 2. Start a Supabase query
-    let supabaseQuery = supabase
-      .from('previous_sales')
-      .select('brand, event, sitewide, discount, start_date, end_date')
+    const { data, error } = await supabase
+      .from("previous_sales")
+      .select("brand, event, sitewide, discount, start_date, end_date")
+      .ilike("brand", `%${searchTerm}%`)
+      .order("start_date", { ascending: false })
 
-    // 3. For each word, chain an .ilike condition
-    //    By default, multiple .ilike() calls are combined with logical AND
-    searchWords.forEach(word => {
-      supabaseQuery = supabaseQuery.ilike('brand', `%${word}%`)
-    })
+    console.log('Supabase response:', { data, error })
 
-    // 4. Finally, order the result
-    supabaseQuery = supabaseQuery.order('start_date', { ascending: false })
-
-    // 5. Execute the query
-    const { data, error } = await supabaseQuery
     if (error) throw error
 
     // 6. Transform if needed
@@ -44,6 +36,8 @@ export async function GET(request: Request) {
       start_date: sale.start_date,
       end_date: sale.end_date
     })) || []
+
+    console.log('Transformed data:', transformedData)
 
     return NextResponse.json(transformedData)
   } catch (error) {

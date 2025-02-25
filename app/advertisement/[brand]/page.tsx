@@ -21,16 +21,21 @@ async function validateBrand(brand: string) {
 
     console.log("3. Supabase response:", { data, error })
     
-    if (error || !data || data.length === 0) {
-      console.log("4a. Redirecting to results because:", error || "No data found")
-      redirect(`/results/${brand}`)
+    if (error) {
+      console.error("4a. Supabase error:", error)
+      return null
     }
     
-    console.log("4b. Validation passed, returning data")
+    if (!data || data.length === 0) {
+      console.log("4b. No data found")
+      return null
+    }
+    
+    console.log("4c. Validation passed, returning data")
     return data
   } catch (error) {
     console.error("5. Error during validation:", error)
-    redirect(`/results/${brand}`)
+    return null
   }
 }
 
@@ -38,17 +43,21 @@ export default async function AdvertisementPage(props: {
   params: BrandParams
   searchParams: SearchParams
 }) {
-  const params = await props.params
-  const searchParams = await props.searchParams
+  const rawParams = await props.params
+  const decodedBrand = decodeURIComponent(rawParams.brand).toLowerCase()
+
+  const sParams = await props.searchParams
 
   let brandData
-  if (searchParams.data) {
-    // Use any data passed from the search
-    brandData = JSON.parse(decodeURIComponent(searchParams.data))
+  if (sParams.data) {
+    brandData = JSON.parse(decodeURIComponent(sParams.data))
   } else {
-    // Fallback: validate the brand by looking for it in previous_sales
-    brandData = await validateBrand(params.brand.toLowerCase())
+    brandData = await validateBrand(decodedBrand)
   }
 
-  return <AdvertisementClient brand={params.brand} brandData={brandData} />
+  if (!brandData) {
+    redirect(`/results/${encodeURIComponent(decodedBrand)}`)
+  }
+
+  return <AdvertisementClient brand={decodedBrand} brandData={brandData} />
 }

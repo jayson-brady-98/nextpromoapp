@@ -19,13 +19,15 @@ type BrandParams = Promise<{ brand: string }>
 type SearchParams = Promise<Record<string, string | string[] | undefined>>
 
 export default async function ResultsPage(props: {
-  params: BrandParams;
-  searchParams: SearchParams;
+  params: Promise<{ brand: string }>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
-  const params = await props.params
+  const rawParams = await props.params
+  const brand = decodeURIComponent(rawParams.brand).toLowerCase()
+
   const searchParams = await props.searchParams
   
-  const previousSales = await fetchPreviousSales(params.brand.toLowerCase())
+  const previousSales = await fetchPreviousSales(brand)
 
   const sales: Sale[] = Array.isArray(previousSales) ? previousSales : []
 
@@ -35,7 +37,7 @@ export default async function ResultsPage(props: {
         <main className="flex-grow flex flex-col items-center justify-center p-4">
           <div className="w-full max-w-2xl mx-auto text-center">
             <h1 className="text-3xl font-bold mb-4">
-              Sorry, I haven't added &quot;{decodeURIComponent(params.brand).replace(/\b\w/g, (c) => c.toUpperCase())}&quot; yet
+              Sorry, I haven't added &quot;{decodeURIComponent(rawParams.brand).replace(/\b\w/g, (c) => c.toUpperCase())}&quot; yet
             </h1>
             <p className="text-xl mb-8">
               <a
@@ -44,7 +46,7 @@ export default async function ResultsPage(props: {
               >
                  Please fill out this form
               </a>{" "}
-              and I&apos;ll add &quot;{decodeURIComponent(params.brand).replace(/\b\w/g, (c) => c.toUpperCase())}&quot; to the database asap :)
+              and I&apos;ll add &quot;{decodeURIComponent(rawParams.brand).replace(/\b\w/g, (c) => c.toUpperCase())}&quot; to the database asap :)
             </p>
             <Link
               href="/"
@@ -61,7 +63,7 @@ export default async function ResultsPage(props: {
   }
 
   const formattedData = {
-    name: decodeURIComponent(params.brand).replace(/\b\w/g, (c: string) => c.toUpperCase())
+    name: decodeURIComponent(rawParams.brand).replace(/\b\w/g, (c: string) => c.toUpperCase())
   }
 
   return (
