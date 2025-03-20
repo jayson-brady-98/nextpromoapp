@@ -3,6 +3,7 @@
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { Footer } from '@/components/footer'
+import { Loader } from 'lucide-react'
 
 interface AdvertisementClientProps {
   brand: string;
@@ -22,6 +23,15 @@ export function AdvertisementClient({ brand, brandData }: AdvertisementClientPro
   
   return (
     <div className="min-h-screen flex flex-col bg-[#182A39]">
+      <style jsx global>{`
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+        .spinner {
+          animation: spin 1s linear infinite;
+        }
+      `}</style>
       <main className="flex-grow flex flex-col items-center p-4 gap-4">
         <div className="w-full max-w-2xl mx-auto text-center pt-6">
           <div className="mb-4">
@@ -29,7 +39,7 @@ export function AdvertisementClient({ brand, brandData }: AdvertisementClientPro
               Getting <span className="text-[#b39a55]">{decodeURIComponent(brand).replace(/\b\w/g, (c) => c.toUpperCase())}&apos;s</span> discount history
             </h1>
             <div className="flex flex-col items-center gap-4">
-              <div className="w-8 h-8 border-4 border-[#D2CAA6] border-t-transparent rounded-full animate-spin" />
+              <Loader className="w-8 h-8 text-[#D2CAA6] spinner" />
               <p className="text-[#D2CAA6] text-lg">
                 This should take no longer than 10 seconds
               </p>

@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation'
 import { useState, useEffect } from 'react'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { Search } from 'lucide-react'
+import { Search, Loader } from 'lucide-react'
 import { fetchPreviousSales } from '@/lib/api/previousSales'
 
 export function SearchBar() {
@@ -33,20 +33,31 @@ export function SearchBar() {
         const previousSales = await fetchPreviousSales(searchTerm)
         
         if (previousSales && previousSales.length > 0) {
-          // If the brand exists in previous_sales, show advertisement
-          await router.push(`/advertisement/${searchTerm}`)
+          // Navigate without waiting for completion
+          router.push(`/advertisement/${searchTerm}`)
         } else {
-          // If brand doesn't exist, go directly to results
-          await router.replace(`/results/${searchTerm}`)
+          // Navigate without waiting for completion
+          router.replace(`/results/${searchTerm}`)
         }
+        // Don't reset isLoading here
       }
-    } finally {
+    } catch (error) {
       setIsLoading(false)
+      console.error('Navigation error:', error)
     }
   }
 
   return (
     <form onSubmit={handleSubmit} className="w-full max-w-2xl mx-auto">
+      <style jsx global>{`
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+        .spinner {
+          animation: spin 1s linear infinite;
+        }
+      `}</style>
       <div className="relative flex items-center">
         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#182A39]/60 w-5 h-5" />
         <Input
@@ -71,8 +82,8 @@ export function SearchBar() {
         >
           {isLoading ? (
             <div className="flex items-center gap-2">
-              <span className="animate-spin">↻</span>
-              Searching...
+              <Loader className="w-4 h-4" style={{ animation: 'spin 1s linear infinite' }} />
+              <span>Searching</span>
             </div>
           ) : (
             'Search'
