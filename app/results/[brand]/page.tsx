@@ -40,11 +40,12 @@ export default async function ResultsPage(props: {
               Sorry, I haven&apos;t added &quot;{decodeURIComponent(rawParams.brand).replace(/\b\w/g, (c) => c.toUpperCase())}&quot; yet
             </h1>
             <p className="text-xl mb-8">
+              Please check for typos or{" "}
               <a
                 href="https://jmbrady.notion.site/15c9d40c313680ddb05fe3ea25234631?pvs=105"
                 className="text-[#b39a55] hover:text-[#cfcaa3] transition-colors"
               >
-                 Please check for typos or fill out this form
+                fill out this form
               </a>{" "}
               and I&apos;ll add &quot;{decodeURIComponent(rawParams.brand).replace(/\b\w/g, (c) => c.toUpperCase())}&quot; to the database asap :)
             </p>
@@ -167,13 +168,13 @@ export default async function ResultsPage(props: {
                             const salesPerYear = recentSales.length / 2
 
                             if (salesPerYear >= 8) {
-                              return `${actualBrandName} offers discounts frequently throughout the year`
+                              return `${actualBrandName} tends to offer discounts frequently throughout the year`
                             } else if (salesPerYear >= 4) {
-                              return `${actualBrandName} offers discounts a few times a year`
+                              return `${actualBrandName} tends to offer discounts a few times a year`
                             } else if (salesPerYear >= 1) {
-                              return `${actualBrandName} offers discounts once or twice a year`
+                              return `${actualBrandName} tends to offer discounts once or twice a year`
                             } else {
-                              return `${actualBrandName} offers discounts once in a blue moon`
+                              return `Looks like ${actualBrandName} offers discounts once in a blue moon`
                             }
                           })()}
                         </div>
