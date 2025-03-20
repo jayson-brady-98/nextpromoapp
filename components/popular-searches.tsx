@@ -2,7 +2,7 @@
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { popularSearches } from '../lib/sample-data'
-import { TrendingUp } from 'lucide-react'
+import { Loader } from 'lucide-react'
 import { fetchPreviousSales } from '@/lib/api/previousSales'
 
 export function PopularSearches() {
@@ -17,14 +17,14 @@ export function PopularSearches() {
       const previousSales = await fetchPreviousSales(searchTerm)
       
       if (previousSales && previousSales.length > 0) {
-        // If the brand exists in previous_sales, show advertisement
-        await router.push(`/advertisement/${searchTerm}`)
+        // Navigate without waiting for completion
+        router.push(`/advertisement/${searchTerm}`)
       } else {
-        // If brand doesn't exist, go directly to results
-        await router.replace(`/results/${searchTerm}`)
+        // Navigate without waiting for completion
+        router.replace(`/results/${searchTerm}`)
       }
       
-      setLoadingSearch(null)
+      // Don't reset loadingSearch here - let it remain until navigation is complete
     } catch (error) {
       setLoadingSearch(null)
       console.error('Navigation error:', error)
@@ -34,14 +34,12 @@ export function PopularSearches() {
   return (
     <div className="mt-8">
       <style jsx global>{`
-        @keyframes singleVibrate {
-          0% { transform: translateX(0); }
-          25% { transform: translateX(-2px); }
-          75% { transform: translateX(2px); }
-          100% { transform: translateX(0); }
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
         }
-        .vibrate-once {
-          animation: singleVibrate 0.3s ease-in-out;
+        .spinner {
+          animation: spin 1s linear infinite;
         }
       `}</style>
       <div className="flex justify-center">
@@ -58,7 +56,7 @@ export function PopularSearches() {
                          relative ${loadingSearch === search ? 'pl-8 sm:pl-10' : ''}`}
             >
               {loadingSearch === search && (
-                <TrendingUp className="absolute inset-y-0 left-3 sm:left-4 my-auto w-3 h-3 sm:w-4 sm:h-4 vibrate-once" />
+                <Loader className="absolute inset-y-0 left-3 sm:left-4 my-auto w-3 h-3 sm:w-4 sm:h-4 spinner" />
               )}
               {search}
             </button>
