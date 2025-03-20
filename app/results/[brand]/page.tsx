@@ -37,14 +37,14 @@ export default async function ResultsPage(props: {
         <main className="flex-grow flex flex-col items-center justify-center p-4">
           <div className="w-full max-w-2xl mx-auto text-center">
             <h1 className="text-3xl font-bold mb-4">
-              Sorry, I haven't added &quot;{decodeURIComponent(rawParams.brand).replace(/\b\w/g, (c) => c.toUpperCase())}&quot; yet
+              Sorry, I haven&apos;t added &quot;{decodeURIComponent(rawParams.brand).replace(/\b\w/g, (c) => c.toUpperCase())}&quot; yet
             </h1>
             <p className="text-xl mb-8">
               <a
                 href="https://jmbrady.notion.site/15c9d40c313680ddb05fe3ea25234631?pvs=105"
                 className="text-[#b39a55] hover:text-[#cfcaa3] transition-colors"
               >
-                 Please fill out this form
+                 Please check for typos or fill out this form
               </a>{" "}
               and I&apos;ll add &quot;{decodeURIComponent(rawParams.brand).replace(/\b\w/g, (c) => c.toUpperCase())}&quot; to the database asap :)
             </p>
@@ -62,9 +62,10 @@ export default async function ResultsPage(props: {
     )
   }
 
-  const formattedData = {
-    name: decodeURIComponent(rawParams.brand).replace(/\b\w/g, (c: string) => c.toUpperCase())
-  }
+  // Get the actual brand name from the first sale in the database
+  const actualBrandName = sales.length > 0 
+    ? sales[0].brand.replace(/\b\w/g, (c: string) => c.toUpperCase())
+    : decodeURIComponent(rawParams.brand).replace(/\b\w/g, (c: string) => c.toUpperCase())
 
   return (
     <div className="min-h-screen flex flex-col bg-[#182A39]">
@@ -85,7 +86,7 @@ export default async function ResultsPage(props: {
               <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-6">
                 <div className="w-full">
                   <h1 className="text-4xl font-bold text-[#E4434B] text-center">
-                    Previous {formattedData.name} Sales
+                    Previous {actualBrandName} Sales
                   </h1>
                   <h2 className="text-sm text-center text-[#CFCAA3] mt-1">Based on available data</h2>
                 </div>
@@ -166,13 +167,13 @@ export default async function ResultsPage(props: {
                             const salesPerYear = recentSales.length / 2
 
                             if (salesPerYear >= 8) {
-                              return `${formattedData.name} offers discounts frequently throughout the year`
+                              return `${actualBrandName} offers discounts frequently throughout the year`
                             } else if (salesPerYear >= 4) {
-                              return `${formattedData.name} offers discounts a few times a year`
+                              return `${actualBrandName} offers discounts a few times a year`
                             } else if (salesPerYear >= 1) {
-                              return `${formattedData.name} offers discounts once or twice a year`
+                              return `${actualBrandName} offers discounts once or twice a year`
                             } else {
-                              return `${formattedData.name} offers discounts once in a blue moon`
+                              return `${actualBrandName} offers discounts once in a blue moon`
                             }
                           })()}
                         </div>

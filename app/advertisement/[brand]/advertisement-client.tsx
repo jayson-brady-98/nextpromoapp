@@ -21,6 +21,11 @@ export function AdvertisementClient({ brand, brandData }: AdvertisementClientPro
     return () => clearTimeout(timer)
   }, [router, brand])
   
+  // Get the actual brand name from brandData if available
+  const actualBrandName = brandData && brandData.length > 0 && brandData[0].brand
+    ? brandData[0].brand.replace(/\b\w/g, (c: string) => c.toUpperCase())
+    : decodeURIComponent(brand).replace(/\b\w/g, (c: string) => c.toUpperCase())
+  
   return (
     <div className="min-h-screen flex flex-col bg-[#182A39]">
       <style jsx global>{`
@@ -36,7 +41,7 @@ export function AdvertisementClient({ brand, brandData }: AdvertisementClientPro
         <div className="w-full max-w-2xl mx-auto text-center pt-6">
           <div className="mb-4">
             <h1 className="text-4xl font-bold text-[#E4434B] mb-4">
-              Getting <span className="text-[#b39a55]">{decodeURIComponent(brand).replace(/\b\w/g, (c) => c.toUpperCase())}&apos;s</span> discount history
+              Getting <span className="text-[#b39a55]">{actualBrandName}&apos;s</span> discount history
             </h1>
             <div className="flex flex-col items-center gap-4">
               <Loader className="w-8 h-8 text-[#D2CAA6] spinner" />
